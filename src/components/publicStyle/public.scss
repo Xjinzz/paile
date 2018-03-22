@@ -1,0 +1,45 @@
+$title-color : #666;
+$red : #F00;
+$fontSize:16px;
+$ddd : #ddd;
+$top : margin-top;
+$toppx:20px;
+$c :center;
+*{
+    margin :0;
+    padding : 0;
+    list-style:none;
+    font-size:$fontSize;
+}
+.pageTitle{
+    color : $title-color;
+    font-weight : 600;
+}
+.fl{
+    float : left;
+}
+ .redBorder{
+     border : 2px solid $red;
+
+ }
+ .normalBorder{
+    border : 2px solid $ddd;
+
+}
+ .btnPadding{
+     padding : 4px 15px;
+ }
+
+.center{
+    text-align :center;
+}
+.btnLeft{
+    margin-left : 10px;
+}
+.btnhover:hover{
+    background:rgba(30,60,60,0.1);
+    cursor: pointer;
+}
+.c{
+    text-align:center;
+}

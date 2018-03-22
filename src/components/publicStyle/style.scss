@@ -1,0 +1,20 @@
+$tpx:20px;
+$center: 'center';
+$bold : bold;
+$eee:#eee;
+.top20 {
+  margin: $tpx;
+}
+
+.c {
+  text-align: $center;
+}
+.b{
+    font-weight: $bold;
+}
+.bgeee{
+    background:$eee;
+}
+
+
+
