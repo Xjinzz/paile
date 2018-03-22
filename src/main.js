@@ -7,7 +7,6 @@ import router from './router'
 import store from './store/store.js'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
 //axios注入vue原型中 因为已经引入jquery 故而直接使用jq的ajax，如果后期需要优化  可以改为axios 所以删除了 base文件已经修改
 // Vue.prototype.$http = axios.create({
 //                         baseURL: '/apitest',

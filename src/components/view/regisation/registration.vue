@@ -1,12 +1,12 @@
 <template>
     <el-row class = "bgGray">
         <el-col :span = "12" :offset = "6"  style = "margin-top:10px">
-              <el-row style = "margin-top:30px;;background:#fff">
+              <el-row style = "margin-top:30px;padding-top:30px;background:#fff">
                   <el-col>
                       <h3 class = "c">账号注册</h3>
                       <el-col :span = "14" :offset = "5">
                           <el-form 
-                          
+                           style = "padding-top:10px;"
                       :model="infoFrom" 
                       status-icon 
                       label-position="left" 
@@ -29,7 +29,8 @@
                           <el-col :span = "12"><el-input id = "MsgCode" v-model="infoFrom.code" placeholder="短信验证码"></el-input>
                             </el-col>
                             <el-col :span = "11" :offset="1">
-                                 <el-button type="danger" @click = "sengMsgCode">获取短信验证码</el-button>
+                                 <el-button type="danger" style = "width:100%" @click = "sengMsgCode" v-show="getMsgBtnShow">获取短信验证码</el-button>
+                                  <el-button type="info" :loading="true"  style = "width:100%" v-show="!getMsgBtnShow">({{getMsgSurplusSec}}) 秒后重新获取</el-button>
                             </el-col>
                             
                         </el-row>
@@ -61,7 +62,9 @@ export default {
       ifcheck: false,
       checkT:
         '<i class="el-icon-warning" style = "color:red;"></i>请输入验证码',
-      checkImgCode: ""
+      checkImgCode: "",
+      getMsgSurplusSec:60,
+      getMsgBtnShow:true,
     };
   },
   watch: {
@@ -106,15 +109,25 @@ export default {
       this.verifyCode = verifyCode;
     },
     checkPhone() {},
+    alert(data,config){
+      console.log(config)
+      this.$alert(data,'拍乐网提示您',config);
+    },
     sengMsgCode() {
       // 手机号正则 1开头   345789第二位 0-9 8位
       if (!/^1[3|4|5|7|8|9][0-9]\d{8}$/.test(this.infoFrom.phone)) {
-        alert("请输入正确的手机号");
+        this.alert('请输入正确的手机号',{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        })
         document.getElementById("phone").focus();
         return false;
       }
       if (!this.ifcheck) {
-        alert("请输入正确的验证码后继续");
+        this.alert("请输入正确的验证码后继续",{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         this.checkCode = "";
         document.getElementById("code_input").value = "";
         document.getElementById("code_input").focus();
@@ -127,27 +140,55 @@ export default {
         }
       ).then(res => {
         if (res.code == "0") {
-          alert("已经发送验证码,请查看手机");
+          //更换新的验证码
+           this.initCheck();
+          this.getMsgBtnShow = !this.getMsgBtnShow;
+          let time = setInterval(()=>{
+              if(this.getMsgSurplusSec>0){
+                this.getMsgSurplusSec = this.getMsgSurplusSec-1;
+              }else{
+                this.getMsgSurplusSec = 60;
+                clearInterval(time);
+                this.getMsgBtnShow = !this.getMsgBtnShow;
+              }
+          },1000)
+
+          this.alert("已经发送验证码,请查看手机",{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         } else {
-          alert("错误代码:", res.code);
+          this.alert("错误", {
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         }
       });
     },
     submit() {
       if (!/^1[3|4|5|7|8|9][0-9]\d{8}$/.test(this.infoFrom.phone)) {
-        alert("请输入正确的手机号");
+        this.alert("请输入正确的手机号",{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         document.getElementById("phone").focus();
         return false;
       }
       if (!this.ifcheck) {
-        alert("请输入正确的图片验证码后继续");
+        this.alert("请输入正确的图片验证码后继续",{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         this.checkCode = "";
         document.getElementById("code_input").value = "";
         document.getElementById("code_input").focus();
         return false;
       }
       if (this.infoFrom.code.length != 4) {
-        alert("请输入正确的短信验证码后继续");
+        this.alert("请输入正确的短信验证码后继续",{
+           confirmButtonText: '知道了',
+           callback:action=>{},
+        });
         this.infoFrom.code = "";
         document.getElementById("MsgCode").value = "";
         document.getElementById("MsgCode").focus();
@@ -160,7 +201,6 @@ export default {
         }
       )
         .then(res => {
-          console.log(res);
           if (res.code == "0") {
             let token = {
               phone: res.datas.phone,

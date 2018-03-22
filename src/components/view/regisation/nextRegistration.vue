@@ -169,7 +169,7 @@ export default {
             ufload(this.up1fileName)
               .then(data => {
                 if (JSON.parse(data).code == 200) {
-                  this.ruleForm.photo_url1 = JSON.parse(data).url;
+                  this.ruleForm.photo_url1 = `${base_uploadUrl}${JSON.parse(data).url}`;
 
                   this.loadingText = "正在上传图片";
 
@@ -180,13 +180,13 @@ export default {
                     ufload(this.up2fileName)
                       .then(data => {
                         if (JSON.parse(data).code == 200) {
-                          this.ruleForm.photo_url2 = JSON.parse(data).url;
+                          this.ruleForm.photo_url2 =`${base_uploadUrl}${JSON.parse(data).url}`;
                           this.loadingText = "正在上传图片";
 
                           ufload(this.up3fileName)
                             .then(data => {
                               if (JSON.parse(data).code == 200) {
-                                this.ruleForm.photo_url3 = JSON.parse(data).url;
+                                this.ruleForm.photo_url3 = `${base_uploadUrl}${JSON.parse(data).url}`;
 
                                 this.uploading.close();
                                 this.loadingText = "上传成功，正在整理";

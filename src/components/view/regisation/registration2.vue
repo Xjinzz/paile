@@ -31,25 +31,34 @@
  <el-form-item label="店铺头像" required>
      <uploadComp @imgReady = "imgicoReady" :actionUrl = "actionUrl"/>
    </el-form-item>
-
-
-      <el-form-item label="是否有实体店" required prop = "isreal" >
+  <!-- 是否有实体店按钮 暂时去掉 -->
+      <!-- <el-form-item label="是否有实体店" required prop = "isreal" >
     <el-radio-group v-model="ruleForm.isreal" size="medium" >
       <el-radio border label="1">是</el-radio>
        <el-radio border label="2">否</el-radio>
     </el-radio-group>
-  </el-form-item>
-    <el-form-item label = "店铺地址" required prop = "address" v-if = "entity==1">
+  </el-form-item> -->
+    <!-- <el-form-item label = "店铺地址" required prop = "address" v-if = "entity==1">
         <el-input v-model="ruleForm.address" placeholder="请输入店铺地址"/>
     </el-form-item>
 
  <el-form-item label="营业执照" required v-if = "entity==1">
      <uploadComp @imgReady = "imgReady" :actionUrl = "actionUrl"/>
-   </el-form-item>
-
-    <el-form-item label = "联系地址" props = "address" required v-if = "entity==2">
-        <el-input v-model="ruleForm.address" placeholder="请输入联系地址"/>
+   </el-form-item> -->
+<el-form-item label = "城市" required>
+        <el-input v-model="ruleForm.city" disabled/>
     </el-form-item>
+   <el-form-item label = "店铺地址" required prop = "address">
+        <el-input  v-on:blur = "addresDesc" v-model="ruleForm.address" placeholder="请输入店铺地址"/>
+          <el-col class = "inputTip" v-if = "tip.addresDesc">* 请认真此项否则可能导致注册失败，示例:铜山区金山桥经济开发区杨山路21-6号</el-col>
+    </el-form-item>
+
+ <el-form-item label="营业执照" required>
+     <uploadComp @imgReady = "imgReady" :actionUrl = "actionUrl"/>
+   </el-form-item>
+    <!-- <el-form-item label = "联系地址" props = "address" required v-if = "entity==2">
+        <el-input v-model="ruleForm.address" placeholder="请输入联系地址"/>
+    </el-form-item> -->
 
     <el-row style = "margin-top:25px;text-align:center;">
              <el-button type ="danger" @click = "registration2Golast">
@@ -74,7 +83,8 @@
 import uploadComp from "../viewcomp/upload";
 import { ufload } from "../../../api/upyun";
 import { promiseAjax } from "../../../api/ajax";
-import { base_IP, base_port } from "../../../api/base";
+import { base_IP, base_port, base_uploadUrl } from "../../../api/base";
+import { searchByStationName } from "../../../api/map";
 export default {
   components: {
     uploadComp
@@ -90,7 +100,8 @@ export default {
       tip: {
         businessDesc: true,
         name: true,
-        password: true
+        password: true,
+        addresDesc: true
       },
       active: 1,
       //表格里面的数据
@@ -103,7 +114,7 @@ export default {
         //  password:"",
         //  checkpassword:"",
         //是否有店铺
-        isreal: 0,
+        isreal: 1,
         //店铺地址/营业地址
         address: "",
         //营业执照url
@@ -132,14 +143,14 @@ export default {
         //      }
 
         //  ],
-        checkpass: [
-          { required: false, message: "请再次输入密码", trigger: "blur" }
-        ],
-        isreal: [
-          { required: true, message: "请选择是否有店铺", trigger: "blur" }
-        ],
+        // checkpass: [
+        //   { required: false, message: "请再次输入密码", trigger: "blur" }
+        // ],
+        // isreal: [
+        //   { required: true, message: "请选择是否有店铺", trigger: "blur" }
+        // ],
         address: [
-          { required: true, message: "请输入店铺所在地", trigger: "blur" }
+          { required: true, message: "请输入实体店铺所在地", trigger: "blur" }
         ]
       },
       upfileName: "",
@@ -148,12 +159,11 @@ export default {
   },
   mounted() {
     this.ruleForm.shopperid = JSON.parse(localStorage.getItem("datas")).id;
-    console.log(this.ruleForm.shopperid);
   },
   computed: {
-    entity() {
-      return this.ruleForm.isreal;
-    }
+    // entity() {
+    //   return this.ruleForm.isreal;
+    // }
   },
   methods: {
     loading() {
@@ -182,6 +192,9 @@ export default {
     categroyOut() {
       this.tip.businessDesc = false;
     },
+    addresDesc() {
+      this.tip.addresDesc = false;
+    },
     shopNameOut() {
       this.tip.name = false;
     },
@@ -205,6 +218,7 @@ export default {
     registration2Click(ruleForm) {
       this.$refs[ruleForm].validate(valid => {
         if (valid) {
+          //判断参数
           if (this.ruleForm.isreal == "0") {
             return false;
           } else {
@@ -224,35 +238,54 @@ export default {
                       // window.localStorage.setItem('ycode',0);
                       // this.$router.push('/registration3')
                       // 这里发送ajax
-                      this.ruleForm.licenceUrl = JSON.parse(data).url;
+                      this.ruleForm.licenceUrl = `${base_uploadUrl}${
+                        JSON.parse(data).url
+                      }`;
                       ufload(this.imgicoAttr)
                         .then(data => {
                           if (JSON.parse(data).code == 200) {
-                            this.ruleForm.icon = JSON.parse(data).url;
-                            console.log(this.ruleForm);
-                            promiseAjax(
-                              `http://${base_IP}:${base_port}/paile-service/api/shopsHandler/createShop`,
-                              this.ruleForm
-                            )
+                            this.ruleForm.icon = `${base_uploadUrl}${
+                              JSON.parse(data).url
+                            }`;
+                            searchByStationName(this.ruleForm.address)
                               .then(data => {
-                                if (data.code == "0") {
-                                  localStorage.setItem(
-                                    "token_three",
-                                    data.code
-                                  );
-                                  localStorage.setItem(
-                                    "datas2",
-                                    JSON.stringify(data.datas)
-                                  );
-                                  this.uploading.close();
-                                  this.$router.push("/registration3");
-                                } else {
-                                  this.uploading.close();
-                                  this.imgUpLoadErr();
-                                }
+                                this.ruleForm.longitude = data.point.lng;
+                                this.ruleForm.latitude = data.point.lat;
+
+                                promiseAjax(
+                                  `http://${base_IP}:${base_port}/paile-service/api/shopsHandler/createShop`,
+                                  this.ruleForm
+                                )
+                                  .then(data => {
+                                    if (data.code == "0") {
+                                      localStorage.setItem(
+                                        "token_three",
+                                        data.code
+                                      );
+                                      localStorage.setItem(
+                                        "datas2",
+                                        JSON.stringify(data.datas)
+                                      );
+                                      this.uploading.close();
+                                      this.$router.push("/registration3");
+                                    } else {
+                                      this.uploading.close();
+                                      this.imgUpLoadErr();
+                                    }
+                                  })
+                                  .catch(err => {
+                                    this.uploading.close();
+                                    this.imgUpLoadErr();
+                                  });
                               })
                               .catch(err => {
-                                console.log(err);
+                                this.uploading.close();
+                                this.$message({
+                                  type: "error",
+                                  message: "地址获取失败",
+                                  showClose: true,
+                                  center: true
+                                });
                               });
                           } else {
                             this.uploading.close();
@@ -276,49 +309,50 @@ export default {
                 this.uploading.close();
                 this.imgUpLoadErr();
               }
-            } else if (this.ruleForm.isreal == "2") {
-              //这里和上面重复  造成代码多余  将来优化的店
-              if (typeof this.imgicoAttr == "object") {
-                this.loadingText = "正在上传图片";
-                this.loading();
-                ufload(this.imgicoAttr)
-                  .then(data => {
-                    if (JSON.parse(data).code == 200) {
-                      this.ruleForm.icon = JSON.parse(data).url;
-                      console.log(this.ruleForm);
-                      promiseAjax(
-                        `http://${base_IP}:${base_port}/paile-service/api/shopsHandler/createShop`,
-                        this.ruleForm
-                      )
-                        .then(data => {
-                          if (data.code == "0") {
-                            localStorage.setItem("token_three", data.code);
-                            localStorage.setItem(
-                              "datas2",
-                              JSON.stringify(data.datas)
-                            );
-                            this.uploading.close();
-                            this.$router.push("/registration3");
-                          } else {
-                            this.uploading.close();
-                            this.imgUpLoadErr();
-                          }
-                        })
-                        .catch(err => {
-                          this.uploading.close();
-                          this.imgUpLoadErr();
-                        });
-                    } else {
-                      this.uploading.close();
-                      this.imgUpLoadErr();
-                    }
-                  })
-                  .catch(err => {
-                    this.uploading.close();
-                    this.imgUpLoadErr();
-                  });
-              }
             }
+            //  else if (this.ruleForm.isreal == "2") {
+            //   //这里和上面重复  造成代码多余  将来优化的店
+            //   if (typeof this.imgicoAttr == "object") {
+            //     this.loadingText = "正在上传图片";
+            //     this.loading();
+            //     ufload(this.imgicoAttr)
+            //       .then(data => {
+            //         if (JSON.parse(data).code == 200) {
+            //           this.ruleForm.icon = JSON.parse(data).url;
+            //           console.log(this.ruleForm);
+            //           promiseAjax(
+            //             `http://${base_IP}:${base_port}/paile-service/api/shopsHandler/createShop`,
+            //             this.ruleForm
+            //           )
+            //             .then(data => {
+            //               if (data.code == "0") {
+            //                 localStorage.setItem("token_three", data.code);
+            //                 localStorage.setItem(
+            //                   "datas2",
+            //                   JSON.stringify(data.datas)
+            //                 );
+            //                 this.uploading.close();
+            //                 this.$router.push("/registration3");
+            //               } else {
+            //                 this.uploading.close();
+            //                 this.imgUpLoadErr();
+            //               }
+            //             })
+            //             .catch(err => {
+            //               this.uploading.close();
+            //               this.imgUpLoadErr();
+            //             });
+            //         } else {
+            //           this.uploading.close();
+            //           this.imgUpLoadErr();
+            //         }
+            //       })
+            //       .catch(err => {
+            //         this.uploading.close();
+            //         this.imgUpLoadErr();
+            //       });
+            //   }
+            // }
           }
         } else {
           return false;

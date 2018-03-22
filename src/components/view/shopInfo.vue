@@ -10,8 +10,8 @@
             </ul>
           </el-row>
           <el-row style = "margin-top:10px;">
-            <basicInfo v-if="!switchBtn"/>
-            <paperInfo v-if = "switchBtn"/>
+            <basicInfo v-show="!switchBtn"/>
+            <paperInfo v-show = "switchBtn"/>
           </el-row>
       </el-col>
   </el-row>

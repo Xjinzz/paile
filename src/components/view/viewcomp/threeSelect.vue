@@ -166,7 +166,6 @@ export default {
             $('#type3 li').css({
                  backgroundColor:this.isArray(this.normalbgColor)?this.normalbgColor[2]:this.isString(this.normalbgColor)?this.normalbgColor:"#fff",
                 color:this.isArray(this.normalTextColor)?this.normalTextColor[2]:this.isString(this.normalTextColor)?this.normalTextColor:"#333"
-                
             }).eq(i).css({
                 backgroundColor:this.isArray(this.selectbgColor)?this.selectbgColor[2]:this.isString(this.selectbgColor)?this.selectbgColor:"#4d7df8",
                 color:this.isArray(this.selectTextColor)?this.selectTextColor[2]:this.isString(this.selectTextColor)?this.selectTextColor:"#fff"    
