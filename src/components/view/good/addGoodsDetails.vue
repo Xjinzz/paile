@@ -1,14 +1,22 @@
 <template>
     <el-col class="top20 bower" :span = "20" :offset = "2" style = "">
-        <p>商品详情信息</p>
+       
         <el-col :span = "20" :offset = "2">
+           <p>商品详情信息</p>
             <el-form :model = "shopData"  ref="ruleForm" :rules="rules"  label-width ="150px" status-icon inline>
+                <el-row>
+                    <el-form-item label = "商品类型" prop = "shopType">
+                        <el-select v-model="shopData.shopType">
+                            <el-option v-for="item in options" :label = "item.label" :value = "item.value" :key = "item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-row>
                 <el-row>
                 <el-form-item label = "商品标题" prop = "shopTitle">
                     <el-input v-model = "shopData.shopTitle" placeholder = "请输入商品标题" >
                       <i slot = "suffix" class = "el-input__icon el-icon-goods "></i>
                     </el-input>
-
                 </el-form-item>
                 </el-row>
                 <el-row>
@@ -97,7 +105,7 @@
                  </el-row>
                  </transition>
             
-                    <!-- <el-col :span = "24" style = "margin-top : 20px;">
+                     <el-col :span = "24" style = "margin-top : 20px;">
                                 <el-form-item label = "商品主图轮播图">
                                         <el-col :span = "8" :offset = '1'>
                                             <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
@@ -106,7 +114,7 @@
                                             商品主图：图片尺寸等宽高，仅支持jpg格式的图片
                                         </el-col>
                                 </el-form-item>
-                    </el-col> -->
+                    </el-col> 
                
           
                     <el-col :span = "24" style = "margin-top : 20px;">
@@ -151,6 +159,67 @@
                             </el-col>
                          </el-form-item>    
                     </el-col>
+
+                    <hr/>
+                      <el-row>
+                      <p>商品规格库存</p>
+                      <el-col class = "top20" :span = "22" :offset="1">
+                        <el-radio-group v-model="shopData.spennum" size = "mini">
+                            <el-radio-button :label = "k" :key="k" v-for = "(i,k) in ['无','一种','两种','三种']">
+                                  {{i}}规格
+                            </el-radio-button>
+                      </el-radio-group>
+                      </el-col>
+                      <el-col :span = "20" :offset="1" v-for = "(item,k) in shopData.spennum" :key = "item" style = "margin-top:10px">
+                          <selectComp :options = "specOptions" @changeSelect = 'selectfunc' :index = "k"></selectComp>
+                        
+                          <el-row style = "margin-top:10px;">
+                          <el-tag
+                            v-for="(tag,index) in shopData.tags[k]"
+                              :key="index"
+                              :closable = "true"
+                              :disable-transitions ="false"
+                               @close="handleClose(tag,k)"
+                              :type="tag.type" style = "margin-left:5px;">
+                              {{tag.name}}
+                          </el-tag>
+                            <el-button class="button-new-tag" size="small" @click = "addShopSpec(k)">
+                              添加
+                          </el-button>
+                          </el-row>
+                      </el-col>
+                 </el-row>
+                  <!-- <hr/> -->
+                  <!-- <el-row>
+                    <p>商品基本参数</p>
+                    <el-form-item label = "商品分类">
+                            <el-input value = "xxx" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-row>
+                      <el-form-item label = "假一赔十">
+                              <el-input value = "xxx" :disabled="true"></el-input>
+                      </el-form-item>
+                    </el-row>
+                    <el-row>
+                      <el-form-item label = "七天无理由退货">
+                              <el-input value = "xxx" :disabled="true"></el-input>
+                      </el-form-item>
+                    </el-row>
+                  </el-row> -->
+                  <el-row v-if = "shopData.isShopGroup">
+                    <hr/>
+                    <el-form-item label = "团购人数">
+                          <el-input v-model="shopData.groupNum" disabled></el-input>
+                          <el-slider :min = '2' :max = '10' v-model="shopData.groupNum" 
+                          :format-tooltip="formatTooltip"></el-slider>
+                    </el-form-item>
+                    <el-form-item label = "单次限量">
+                        <el-input placeholder="请输入单次限量"></el-input>
+                    </el-form-item>
+                    <el-form-item label = "限购次数">
+                        <el-input placeholder="请输入限购次数"></el-input>
+                    </el-form-item>
+                  </el-row>
                     <el-col :span = "24" style = "margin-top:20px;text-align:center">
                         <el-button type="danger" round @click="submitUpload('ruleForm')">提交</el-button>
                     </el-col>
@@ -162,18 +231,101 @@
 import uploadComp from "../viewcomp/upload";
 import { ufload } from "../../../api/upyun";
 import $ from "jquery";
+import selectComp from "../smallcomp/select";
 export default {
   data() {
     return {
       shopData: {
+        // 商品标题
         shopTitle: "",
+        //商品市场价格
         shopPrice: "",
-        template: "",
-        shopWeight: "",
+
+        //商品描述
         shopDesc: "",
+        //团购价格
         shopGroupPrice: "",
-        isShopGroup:true,
+        //商品是否是团购
+        isShopGroup: true,
+        //商品类型
+        shopType: 1,
+        // 选择几种规格
+        spennum: 0,
+        //
+        spec: [],
+        //第一个规格
+        param1: "",
+        //第二个规格
+        param2: "",
+        //第三个规格
+        param3: "",
+        //商品规格标签
+        tags: [[], [], []],
+        //团购人数
+        groupNum: 2
       },
+      //规格下拉
+      specOptions: [
+        {
+          value: "尺寸",
+          label: "尺寸"
+        },
+        {
+          value: "颜色",
+          label: "颜色"
+        },
+        {
+          value: "款式",
+          label: "款式"
+        },
+        {
+          value: "口味",
+          label: "口味"
+        },
+        {
+          value: "尺码",
+          label: "尺码"
+        }
+      ],
+      //商品类型 下拉
+      options: [
+        {
+          value: 1,
+          label: "男装"
+        },
+        {
+          value: 2,
+          label: "女装"
+        },
+        {
+          value: 3,
+          label: "居家"
+        },
+        {
+          value: 4,
+          label: "母婴"
+        },
+        {
+          value: 5,
+          label: "鞋包"
+        },
+        {
+          value: 6,
+          label: "玩具"
+        },
+        {
+          value: 7,
+          label: "美妆"
+        },
+        {
+          value: 8,
+          label: "饰品"
+        },
+        {
+          value: 9,
+          label: "数码"
+        }
+      ],
       // optionList : [
       //     {label : "模板一",value : "模板一"},
       //     {label : "模板二",value : "模板二"},
@@ -247,35 +399,81 @@ export default {
         shopDesc: [
           { required: true, message: "请输入商品描述", trigger: "blur" },
           { max: 30, message: "最多三十个字符", trigger: "blur" }
+        ],
+        shopType: [
+          {
+            required: true,
+            message: "请选择类型",
+            trigger: "blur"
+          }
         ]
       }
     };
   },
 
-  watch: {
-    // specList(){
-    //     // console.log(this.specList)
-    // }
-  },
+  watch: {},
   methods: {
+    formatTooltip(val) {
+      return val + "人成团";
+    },
+    handleClose(tag, k) {
+      this.shopData.tags[k].splice(this.shopData.tags[k].indexOf(tag), 1);
+    },
+    addShopSpec(k) {
+      let paramValue = "";
+      switch (k) {
+        case 0:
+          paramValue = this.param1;
+          break;
+        case 1:
+          paramValue = this.param2;
+          break;
+        case 2:
+          paramValue = this.param3;
+          break;
+      }
 
+      this.$prompt(`请输入${paramValue}的规格`, "拍乐网提示", {
+        confiremButtonText: "添加",
+        cancelButtonText: "取消"
+      })
+        .then(data => {
+          let randomNum = Math.floor(Math.random() * 5);
+          console.log(randomNum);
+          console.log(data.value);
+          let value = {
+            name: data.value,
+            type: ["", "success", "info", "warning", "danger"][randomNum]
+          };
+          this.shopData.tags[k].push(value);
+        })
+        .catch(() => {
+          console.log(2);
+        });
+    },
+    selectfunc(data) {
+      switch (data.index) {
+        case 0:
+          this.param1 = data.optionSelect;
+          break;
+        case 1:
+          this.param2 = data.optionSelect;
+          break;
+        case 2:
+          this.param3 = data.optionSelect;
+          break;
+      }
+    },
 
     changeImg(file, filelist) {
-    
-                     filelist.map((item, index) => {
-                         this.changeImgList[index] = item.raw;
-                       });
-               
-                        
-                
-                 
- 
+      filelist.map((item, index) => {
+        this.changeImgList[index] = item.raw;
+      });
     },
     changeImgi(file, filelist) {
-       
-            filelist.map((item, index) => {
-                this.changeImgiList[index] = item.raw;
-              });
+      filelist.map((item, index) => {
+        this.changeImgiList[index] = item.raw;
+      });
     },
     loading() {
       this.uploading = this.$loading({
@@ -323,59 +521,52 @@ export default {
 
     // 提交上传图片
     submitUpload(formName) {
-    
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if(this.shopData){
-                //是团购商品时候怎么做
-                if(typeof this.groupimgAttr == "object"){
-                this.loadingText = "正在上传图片";
-                this.loading();
-                }
-          ufload(this.groupimgAttr)
+          if (this.shopData) {
+            //是团购商品时候怎么做
+            if (typeof this.groupimgAttr == "object") {
+              this.loadingText = "正在上传图片";
+              this.loading();
+            }
+            ufload(this.groupimgAttr)
               .then(data => {
                 if (JSON.parse(data).code == 200) {
-
-                }else{
-                   this.uploading.close();
-                    this.imgUpLoadErr();
+                } else {
+                  this.uploading.close();
+                  this.imgUpLoadErr();
                 }
-              }).catch(()=>{
-                 this.uploading.close();
-                    this.imgUpLoadErr();
               })
+              .catch(() => {
+                this.uploading.close();
+                this.imgUpLoadErr();
+              });
           }
-         
-          if (
-            this.changeImgList.length > 0 &&
-            this.changeImgiList.length > 0
-          ) {
-              this.loadingText = "正在上传图片";
-                  this.loading();
-                        this.upanyload(this.changeImgList, 0)
-                          .then(data => {
-                            this.upanyload(this.changeImgiList, 0)
-                              .then(() => {
-                                this.uploading.close();
-                                this.loadingText = "上传成功，正在整理";
-                                this.loading();
-                                setTimeout(() => {
-                                  this.uploading.close();
-                                  this.$router.push("/home/goods/goodsList");
-                                }, 500);
-                              })
-                              .catch(() => {
-                                this.uploading.close();
-                                this.imgUpLoadErr();
-                              });
-                          })
-                          .catch(() => {
-                            this.uploading.close();
-                            this.imgUpLoadErr();
-                          });
-                    
-                
-            
+
+          if (this.changeImgList.length > 0 && this.changeImgiList.length > 0) {
+            this.loadingText = "正在上传图片";
+            this.loading();
+            this.upanyload(this.changeImgList, 0)
+              .then(data => {
+                this.upanyload(this.changeImgiList, 0)
+                  .then(() => {
+                    this.uploading.close();
+                    this.loadingText = "上传成功，正在整理";
+                    this.loading();
+                    setTimeout(() => {
+                      this.uploading.close();
+                      this.$router.push("/home/goods/goodsList");
+                    }, 500);
+                  })
+                  .catch(() => {
+                    this.uploading.close();
+                    this.imgUpLoadErr();
+                  });
+              })
+              .catch(() => {
+                this.uploading.close();
+                this.imgUpLoadErr();
+              });
           } else {
             this.$message({
               type: "error",
@@ -437,12 +628,21 @@ export default {
     }
   },
   components: {
-    uploadComp
+    uploadComp,
+    selectComp
   }
 };
 </script>
 <style lang = "scss" scoped>
 @import "../../publicStyle/style.scss";
+// 增加一个新的标签的按钮
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 .bower {
   height: 730px;
   overflow-y: scroll;
@@ -472,19 +672,19 @@ export default {
   border: 1px solid #ccc;
 }
 .bounce-enter-active {
-  animation: bounce-in .5s;
+  animation: bounce-in 0.5s;
 }
 .bounce-leave-active {
-  animation: bounce-in .5s reverse;
+  animation: bounce-in 0.5s reverse;
 }
 @keyframes bounce-in {
   0% {
-    opacity: .1;
-    transform: translate(0,20px);
+    opacity: 0.1;
+    transform: translate(0, 20px);
   }
   100% {
     opacity: 1;
-    transform: translate(0,0px);
+    transform: translate(0, 0px);
   }
 }
 </style>

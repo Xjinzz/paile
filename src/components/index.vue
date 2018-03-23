@@ -15,7 +15,7 @@
                             
                             <el-menu-item index="/home">首页</el-menu-item>
                             <el-menu-item index="/registration">商家注册</el-menu-item>
-                            <el-menu-item index="/registlogin">商家登陆</el-menu-item>
+                            <el-menu-item index="/login">商家登陆</el-menu-item>
                             <el-menu-item index="/registration1">代理商</el-menu-item></el-menu-item>
                             <el-menu-item index="/registration2">帮助中心</el-menu-item>
                             <el-menu-item index="/registration3">举报中心</el-menu-item>

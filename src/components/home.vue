@@ -16,16 +16,25 @@
                <el-col style = "text-align:center"> {{shopImgText}}</el-col>
         </el-row>
     
-      <el-submenu :index="i.num" v-for = "(i, k) in $router.options.routes[0].children" :key = "i.name">
+      <el-submenu :index="i.num" v-if = "i.hasOwnProperty('children')"  v-for = "(i, k) in $router.options.routes[0].children" 
+      :key = "i.name">
         
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>{{i.name}}</span>
         </template>
-        <el-menu-item-group v-for = "i2 in $router.options.routes[0].children[k].children"  :key = "i2.name">
+        <el-menu-item-group v-for = "i2 in $router.options.routes[0].children[k].children" v-if = "!i2.hidden" :key = "i2.name">
            <el-menu-item :index="i2.num" :route = "i2.path">{{i2.name}}</el-menu-item>
+
         </el-menu-item-group>
        </el-submenu>
+
+        <el-menu-item v-if ="!i.hasOwnProperty('children')" v-for = "(i, k) in $router.options.routes[0].children" 
+      :key = "k"
+         :index="i.num" :route = "i.path">
+         <i class="el-icon-menu"></i>
+         {{i.name}}</el-menu-item>
+
     </el-menu>
     
         </el-col>
@@ -56,6 +65,7 @@ export default {
     }
   },
   created() {
+    console.log(this.$router.options.routes[0].children);
   }
 };
 </script>

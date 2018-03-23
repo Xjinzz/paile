@@ -26,6 +26,11 @@ const addGoods = () =>
 //   import ('@/components/view/good/addGoods1');
 const addGoodsDetails = () =>
   import ('@/components/view/good/addGoodsDetails');
+/**
+ * 商家登陆
+ * */ 
+const login = () => import('@/components/view/login/login');
+
 Vue.use(Router)
 
 const router = new Router({
@@ -78,10 +83,35 @@ const router = new Router({
 
         },
         {
+          path : "/login",
+          name : "商家登陆",
+          component : login,
+          meta:{
+            title : "欢迎登陆拍乐网"
+          },
+          num :"3"
+          
+        },
+        {
           path: "/home",
           name: "商品管理",
           component: Home,
           num: "2",
+          beforeEnter:(to,from,next)=>{
+            if (window.localStorage.hasOwnProperty('token')){
+              if(JSON.parse(window.localStorage.getItem('token')).hasOwnProperty('isLogin')){
+                if(JSON.parse(window.localStorage.getItem('token')).isLogin){
+                    next();
+                }else{
+                  router.push('/login')
+                }
+              }else{
+                router.push('/login')
+              }
+            } else{
+              router.push('/login');
+            }
+          },
           children: [{
               path: "/home/goods/addGoods",
               component: addGoods,
@@ -97,6 +127,7 @@ const router = new Router({
               num: "2-2",
               meta: 　{
                 title: "拍乐网_商品列表"
+                
               },
               name: "商品列表",
 
@@ -109,11 +140,13 @@ const router = new Router({
             {
               path: "/home/goods/addGoods/addGoodsDetails",
               component: addGoodsDetails,
+              hidden : true,
               num: "",
             },
             {
               path: "/home/goods/goodsList/:id",
               component: goodShow,
+              hidden : true,
               num: ""
             }
 
