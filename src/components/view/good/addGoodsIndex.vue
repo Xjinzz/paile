@@ -11,7 +11,7 @@
 export default {
   methods: {
     addGood() {
-      this.$router.push("/home/goods/addGoods/addGoods1");
+      this.$router.push("/home/goods/addGoods/addGoodsDetails");
     }
   }
 };

@@ -21,30 +21,29 @@ export default {
     },
     methods:{
       changeImg(file, fileList){
-        // 清空上传的列表,保证只有一
-        const isJPG = file.raw.type === 'image/jpg';
-        const isJPEG = file.raw.type === 'image/jpeg';
-        
-        const isLt1M = file.raw.size / 1024 / 1024 < 1;
-        const imgType = isJPG || isJPEG
-        if(isLt1M && imgType){
-    this.$refs.uploadComp.clearFiles();
-        this.uploaded = false;
-        this.imgUrl = file.url;
-       
-        this.$emit('imgReady',file.raw)
-        }else{
-          
-            if (!isJPG) {
+       //验证上传的格式以及文件大小
+
+        this.$store.dispatch('imgTypeTest',{
+            file
+        }).then(()=>{
+                this.$refs.uploadComp.clearFiles();
+                    this.uploaded = false;
+                    this.imgUrl = file.url;
+                
+                    this.$emit('imgReady',file.raw)
+        }).catch((errMessage)=>{
+           
+            if (!errMessage.isJPG) {
               this.$message.error('上传头像图片只能是 JPG/JPEG 格式!');
             }
-            if (!isLt1M) {
+            if (!errMessage.isLt1M) {
               this.$message.error('上传头像图片大小不能超过 1MB!');
             }
+             // 清空上传的列表,保证只有一
           this.$refs.uploadComp.clearFiles();
 
           
-        }
+        })
     
       },
 

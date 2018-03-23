@@ -193,11 +193,36 @@ const goodsMd = {
 };
 
 
+const publicFunc = {
+    actions:{
+        imgTypeTest(store,data){
+           
+            return new Promise((resolve,reject)=>{
+             
+                const isJPG = data.file.raw.type === 'image/jpg';
+               
+                const isJPEG = data.file.raw.type === 'image/jpeg';
+                const isPNG = data.file.raw.type === 'image/png'; 
+                const isLt1M = data.file.raw.size / 1024 / 1024 < 1;
+           
+                const imgType = isJPG || isJPEG || isPNG;
+                
+                if(isLt1M && imgType){
+                    resolve();
+                }else{
+                    reject({isLt1M,imgType});
+                }
+            })
+        }
+    }
+}
+
+
 
 const store =  new vuex.Store({
 
     modules:{
-        goodsMd
+        goodsMd,publicFunc
     }
 })
 export default store;

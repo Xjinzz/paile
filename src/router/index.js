@@ -22,10 +22,10 @@ const goodShow = () =>
   import ('@/components/view/good/goodShow');
 const addGoods = () =>
   import ('@/components/view/good/addGoodsIndex');
-const addGoods1 = () =>
-  import ('@/components/view/good/addGoods1');
-const addGoods2 = () =>
-  import ('@/components/view/good/addGoods2');
+// const addGoods1 = () =>
+//   import ('@/components/view/good/addGoods1');
+const addGoodsDetails = () =>
+  import ('@/components/view/good/addGoodsDetails');
 Vue.use(Router)
 
 const router = new Router({
@@ -101,14 +101,14 @@ const router = new Router({
               name: "商品列表",
 
             },
+            // {
+            //   path: "/home/goods/addGoods/addGoods1",
+            //   component: addGoods1,
+            //   num: "",
+            // },
             {
-              path: "/home/goods/addGoods/addGoods1",
-              component: addGoods1,
-              num: "",
-            },
-            {
-              path: "/home/goods/addGoods/addGoods2",
-              component: addGoods2,
+              path: "/home/goods/addGoods/addGoodsDetails",
+              component: addGoodsDetails,
               num: "",
             },
             {

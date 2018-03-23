@@ -5,7 +5,10 @@
             <el-form :model = "shopData"  ref="ruleForm" :rules="rules"  label-width ="150px" status-icon inline>
                 <el-row>
                 <el-form-item label = "商品标题" prop = "shopTitle">
-                    <el-input v-model = "shopData.shopTitle" placeholder = "请输入商品标题" ></el-input>
+                    <el-input v-model = "shopData.shopTitle" placeholder = "请输入商品标题" >
+                      <i slot = "suffix" class = "el-input__icon el-icon-goods "></i>
+                    </el-input>
+
                 </el-form-item>
                 </el-row>
                 <el-row>
@@ -15,14 +18,7 @@
                     </el-input>
                 </el-form-item>
                  </el-row>
-                 <el-row>
-                <el-row>
-                <el-form-item label = "团购价格" prop = "shopgroupPrice">
-                    <el-input v-model = "shopData.shopgroupPrice" placeholder = "请输入团购价格">
-                        <el-col slot="append">元</el-col>
-                    </el-input>
-                </el-form-item>
-                 </el-row>
+                 <!-- <el-row> -->
                  <!-- <el-row> -->
                 <!-- <el-form-item label = "运费模板">
                      <el-select v-model="shopData.template" placeholder="运费模板">
@@ -46,38 +42,62 @@
                 </el-col>
                 </el-row> -->
                 <!-- <el-row> -->
-                <el-form-item class = "top20" label = "物流重量(含包装)" prop = "shopWeight">
+                <!-- <el-form-item class = "top20" label = "物流重量(含包装)" prop = "shopWeight">
                      <el-input v-model = "shopData.shopWeight" placeholder = "物流重量">
                         <el-col slot="append">kg</el-col>
                     </el-input>
-                </el-form-item>
-                </el-row>
-                <el-row class = "top20">
+                </el-form-item> -->
+                <!-- </el-row> -->
+                <el-row>
                 <el-form-item label = "商品描述" prop = "shopDesc">
                      <el-input
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 4}"
                         placeholder="请输入内容"
                         v-model="shopData.shopDesc">
+                      
                     </el-input>
+                    
                 </el-form-item>
                  </el-row>
-                 <el-row >
-                <el-col :span = "24">
-                            <el-form-item label = "商品团购图">
-                                <el-col :span = "9" :offset = '1'>
-                                    <uploadComp @imgReady = "groupimgReady"  action = "http://www.paile.com"  style = "width:360px;height:90px;"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-                                </el-col>
-                                <el-col :span = "12" :offset = '2'>
-                                    尺寸要求：<br/>宽：750px；高度在340-360px之间，<br/>图片支持：jpg格式  
-                                </el-col>
-                            </el-form-item>
-                </el-col>
-
-
-                </el-row>
+                 <el-row>
+                      <el-form-item label = "是否为团购商品：">
+                            <el-radio-group v-model="shopData.isShopGroup">
+                                  <el-radio-button border  :label = true >
+                                        是
+                                  </el-radio-button>
+                                  <el-radio-button border :label= false>
+                                    否
+                                  </el-radio-button>
+                            </el-radio-group>
+                      </el-form-item>
+                 </el-row>
+                  <transition name="bounce">
+                 <el-row v-if = "shopData.isShopGroup">
+                      <el-row>
+                        <el-form-item label = "团购价格" prop = "shopgroupPrice">
+                            <el-input v-model = "shopData.shopgroupPrice" placeholder = "请输入团购价格">
+                                <el-col slot="append">元</el-col>
+                                
+                            </el-input>
+                        </el-form-item>
+                      </el-row>
+                      <el-row>
+                        <el-col :span = "24">
+                                    <el-form-item label = "商品团购图">
+                                        <el-col :span = "9" :offset = '1'>
+                                            <uploadComp @imgReady = "groupimgReady"  action = "http://www.paile.com"  style = "width:360px;height:90px;"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                        </el-col>
+                                        <el-col :span = "12" :offset = '2'>
+                                            尺寸要求：<br/>宽：750px；高度在340-360px之间，<br/>图片支持：jpg格式  
+                                        </el-col>
+                                    </el-form-item>
+                        </el-col>
+                      </el-row>
+                 </el-row>
+                 </transition>
             
-                    <el-col :span = "24" style = "margin-top : 20px;">
+                    <!-- <el-col :span = "24" style = "margin-top : 20px;">
                                 <el-form-item label = "商品主图轮播图">
                                         <el-col :span = "8" :offset = '1'>
                                             <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
@@ -86,7 +106,7 @@
                                             商品主图：图片尺寸等宽高，仅支持jpg格式的图片
                                         </el-col>
                                 </el-form-item>
-                    </el-col>
+                    </el-col> -->
                
           
                     <el-col :span = "24" style = "margin-top : 20px;">
@@ -95,18 +115,20 @@
                                     <el-upload class="upload-demo" ref="uploadforbanner" action="https://jsonplaceholder.typicode.com/posts/" 
                                     :on-preview="handlePreview" 
                                     :on-remove = "changeImg"
-                                    :on-change = "changeImg" 
+                                    :on-change = "changeImg"
+                                    accept = "jpg"
                                     :file-list="fileList" 
                                     :auto-upload="false" 
-                                     list-type="picture">
+                                     list-type="picture"
+
+                                     >
                                             <el-button slot="trigger" size="small" type="primary">选取轮播图图片</el-button>
                                              <el-col :span = "24">
                                                 商品轮播图：<br/>图片尺寸等宽高，<br/>仅支持jpg格式的图片，最多上传10张
                                             </el-col>
                                     </el-upload>
-                                   
                             </el-col>
-                         </el-form-item>       
+                         </el-form-item>
                     </el-col>
              
                     
@@ -149,7 +171,8 @@ export default {
         template: "",
         shopWeight: "",
         shopDesc: "",
-        shopGroupPrice: ""
+        shopGroupPrice: "",
+        isShopGroup:true,
       },
       // optionList : [
       //     {label : "模板一",value : "模板一"},
@@ -228,21 +251,31 @@ export default {
       }
     };
   },
-  wach: {
+
+  watch: {
     // specList(){
     //     // console.log(this.specList)
     // }
   },
   methods: {
+
+
     changeImg(file, filelist) {
-      filelist.map((item, index) => {
-        this.changeImgList[index] = item.raw;
-      });
+    
+                     filelist.map((item, index) => {
+                         this.changeImgList[index] = item.raw;
+                       });
+               
+                        
+                
+                 
+ 
     },
     changeImgi(file, filelist) {
-      filelist.map((item, index) => {
-        this.changeImgiList[index] = item.raw;
-      });
+       
+            filelist.map((item, index) => {
+                this.changeImgiList[index] = item.raw;
+              });
     },
     loading() {
       this.uploading = this.$loading({
@@ -266,7 +299,6 @@ export default {
         ufload(fileList[index])
           .then(data => {
             if (JSON.parse(data).code == 200) {
-              console.log(data);
               if (index < fileList.length - 1) {
                 index = index + 1;
                 return this.upanyload(fileList, index)
@@ -291,22 +323,35 @@ export default {
 
     // 提交上传图片
     submitUpload(formName) {
+    
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if(this.shopData){
+                //是团购商品时候怎么做
+                if(typeof this.groupimgAttr == "object"){
+                this.loadingText = "正在上传图片";
+                this.loading();
+                }
+          ufload(this.groupimgAttr)
+              .then(data => {
+                if (JSON.parse(data).code == 200) {
+
+                }else{
+                   this.uploading.close();
+                    this.imgUpLoadErr();
+                }
+              }).catch(()=>{
+                 this.uploading.close();
+                    this.imgUpLoadErr();
+              })
+          }
+         
           if (
-            typeof this.groupimgAttr == "object" &&
-            typeof this.indexBannerimgAttr == "object" &&
             this.changeImgList.length > 0 &&
             this.changeImgiList.length > 0
           ) {
-            this.loadingText = "正在上传图片";
-            this.loading();
-            ufload(this.groupimgAttr)
-              .then(data => {
-                if (JSON.parse(data).code == 200) {
-                  ufload(this.indexBannerimgAttr)
-                    .then(data => {
-                      if (JSON.parse(data).code == 200) {
+              this.loadingText = "正在上传图片";
+                  this.loading();
                         this.upanyload(this.changeImgList, 0)
                           .then(data => {
                             this.upanyload(this.changeImgiList, 0)
@@ -328,24 +373,9 @@ export default {
                             this.uploading.close();
                             this.imgUpLoadErr();
                           });
-                      } else {
-                        this.uploading.close();
-                        this.imgUpLoadErr();
-                      }
-                    })
-                    .catch(err => {
-                      this.uploading.close();
-                      this.imgUpLoadErr();
-                    });
-                } else {
-                  this.uploading.close();
-                  this.imgUpLoadErr();
-                }
-              })
-              .catch(error => {
-                this.uploading.close();
-                this.imgUpLoadErr();
-              });
+                    
+                
+            
           } else {
             this.$message({
               type: "error",
@@ -359,8 +389,6 @@ export default {
           $(".bower").scrollTop("0");
         }
       });
-      //xxxxxxxinput判断
-      //    let children = this.$refs.uploadforbanner.$el.children[2].children;
     },
     groupimgReady(attr) {
       this.groupimgAttr = attr;
@@ -442,5 +470,21 @@ export default {
   -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
   -ms-box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
   border: 1px solid #ccc;
+}
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    opacity: .1;
+    transform: translate(0,20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0,0px);
+  }
 }
 </style>
