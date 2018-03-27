@@ -204,9 +204,15 @@ export default {
           if (res.code == "0") {
             let token = {
               phone: res.datas.phone,
-              code: res.code
+              code: res.code,
+              
             };
+            let pailewang_token = {
+              isLogin:true,
+            }
+            window.localStorage.setItem("pailewang_token", JSON.stringify(pailewang_token));
             window.localStorage.setItem("token", JSON.stringify(token));
+            
             this.$router.push("/nextRegistration");
           } else {
             console.log("失败代码：" + res.code);

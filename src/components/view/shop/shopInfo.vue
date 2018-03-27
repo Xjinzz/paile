@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang = "scss" type = "text/css">
-    @import "../publicStyle/public";
+    @import "../../publicStyle/public";
     .active {
         border:2px solid #f00;
     }

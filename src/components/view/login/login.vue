@@ -194,7 +194,7 @@ export default {
         document.getElementById("MsgCode").focus();
       }
       promiseAjax(
-        `http://${base_IP}:${base_port}/paile-service/api/userHandler/login`,
+        `http://${base_IP}:${base_port}/paile-service/api/userHandler/salerLogin`,
         {
           phone: this.infoFrom.phone,
           code: this.infoFrom.code
@@ -202,19 +202,24 @@ export default {
       )
         .then(res => {
           if (res.code == "0") {
-            let token = {
+            
+            var token = {
               phone: res.datas.phone,
               code: res.code,
               isLogin:true,
-            };
-            window.localStorage.setItem("token", JSON.stringify(token));
+            }
+    
+       
+            window.localStorage.setItem("pailewang_token", JSON.stringify(token));
+        
+
             this.$router.push("/home");
           } else {
             console.log("失败代码：" + res.code);
           }
         })
         .catch(err => {
-          console.err(err);
+          
         });
     }
   },

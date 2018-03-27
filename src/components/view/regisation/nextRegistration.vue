@@ -53,7 +53,7 @@
 import uploadComp from "../viewcomp/upload";
 import { ufload } from "../../../api/upyun";
 import { promiseAjax } from "../../../api/ajax";
-import { base_IP, base_port } from "../../../api/base";
+import { base_IP, base_port,base_uploadUrl } from "../../../api/base";
 export default {
   data() {
     return {
@@ -209,6 +209,10 @@ export default {
                                           "datas",
                                           JSON.stringify(data.datas)
                                         );
+                                                    let pailewang_token = {
+              isLogin:true,
+            }
+            window.localStorage.setItem("pailewang_token", JSON.stringify(pailewang_token));
 
                                         this.$router.push("/registration2");
                                       }
@@ -263,6 +267,10 @@ export default {
     },
     goprev() {
       window.localStorage.clear();
+                  let pailewang_token = {
+              isLogin:true,
+            }
+            window.localStorage.setItem("pailewang_token", JSON.stringify(pailewang_token));
       this.$router.push("/registration");
     }
   },

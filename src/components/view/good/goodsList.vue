@@ -131,7 +131,8 @@
 </template>
 
 <script>
-export default {
+import {promiseAjax} from "@/api/ajax";
+import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
   data() {
     return {
       goods: {
@@ -170,7 +171,12 @@ export default {
     },
     filterData() {
       // 判断用户是清空条件的查询。还是在已经返回全部列表的清空下继续点击查询
-
+      promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/getCargoByPhone`,{
+        phone:'17695518131',
+        index:0,
+      }).then(data=>{
+        console.log(data);
+      })
       if (this.errorClose) {
         //判断用户是否没有点击关闭，防止暴力测试
         if (this.goods.id.length == 0 && this.goods.name.length == 0) {
@@ -248,13 +254,7 @@ export default {
   },
 
   created() {
-    // 之后可以通过ajax获取数据
-    // this.goodsData = this.$store.state.goodsMd.goodsList;
-    // this.backupData = this.goodsData ;
-    // // 重置页数
-    // this.start = 0;
-    // this.end = 1;
-    // this.currentPage = 1;
+      
   }
 };
 </script>

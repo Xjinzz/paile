@@ -267,6 +267,13 @@ export default {
                                         JSON.stringify(data.datas)
                                       );
                                       this.uploading.close();
+                                           let token = {
+                                                isLogin:true,
+                                            }
+                                             localStorage.setItem(
+                                                    "pailewang_token",
+                                                    JSON.stringify(token)
+                                              );
                                       this.$router.push("/registration3");
                                     } else {
                                       this.uploading.close();
@@ -360,6 +367,13 @@ export default {
       });
     },
     registration2Golast() {
+               let token = {
+                                                isLogin:true,
+                                            }
+                                             localStorage.setItem(
+                                                    "pailewang_token",
+                                                    JSON.stringify(token)
+                                              );
       this.$router.push("/nextregistration");
     }
   },

@@ -1,24 +1,24 @@
 <template>
     <el-col :span = "24" :offset = "0" class = "info">
-        <el-col :span = "22" :offset = "1">
+        <el-col :span = "22" :offset = "1" style = "margin-top:20px;">
             <el-row style = "line-height:30px;">
-                <el-col :span = "4" style = "text-align:right">店铺名称 : </el-col>
-                <el-col :span = "18" :offset = "1">{{shopName}}</el-col>
+                <el-col :span = "4" class = "Text_title" style = "text-align:right">店铺名称 : </el-col>
+                <el-col :span = "16" :offset = "1">{{shopName}}</el-col>
             </el-row>
             <el-row style = "line-height:30px;">
-                <el-col :span = "4" style = "text-align:right">店铺认证 : </el-col>
-                <el-col :span = "18" :offset = "1">{{shopAuth}}</el-col>
+                <el-col :span = "4" class = "Text_title"  style = "text-align:right">店铺认证 : </el-col>
+                <el-col :span = "16" :offset = "1">{{shopAuth}}</el-col>
             </el-row>  
             <el-row style = "line-height:30px;">
-                <el-col :span = "4" style = "text-align:right">店铺保证金 : </el-col>
-                <el-col :span = "18" :offset = "1">{{shopBond}}元</el-col>
+                <el-col :span = "4" class = "Text_title"  style = "text-align:right">店铺保证金 : </el-col>
+                <el-col :span = "16" :offset = "1">{{shopBond}}元</el-col>
             </el-row>  
             <el-row style = "line-height:30px;">
-                <el-col :span = "4" style = "text-align:right">主营类目 : </el-col>
-                <el-col :span = "18" :offset = "1">{{MainCategory}}</el-col>
+                <el-col :span = "4" class = "Text_title"  style = "text-align:right">主营类目 : </el-col>
+                <el-col :span = "16" :offset = "1">{{MainCategory}}</el-col>
             </el-row>
             <el-row style = "">
-                <el-col  :span = "4" style = "text-align:right;line-height:100px">店铺头像 : </el-col>
+                <el-col  :span = "4" class = "Text_title"  style = "text-align:right;line-height:100px">店铺头像 : </el-col>
                 <el-upload
                     class="upload-demo"
                     ref="upload"
@@ -29,45 +29,45 @@
                     :limit = "uploadlimit"
                     :on-change = "checkImg"
                     >
-                     <el-col :span = "18" :offset="8"> 
+                     <el-col :span = "16" :offset="8"> 
                           <img v-bind:src="imgUrl" alt="" width = "100px" height = "100px">
                     </el-col>
                 </el-upload>
       
             </el-row>
             <el-row>
-                <el-col :span = "4"  style = "text-align:right;line-height:60px">*店铺地址:</el-col>
-                <el-col :span = "15" :offset = "1">
+                <el-col class = "Text_title"  :span = "4"  style = "text-align:right;line-height:60px">*店铺地址:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.addres"></el-input>    
                 </el-col>    
             </el-row>    
              <el-row>
-                <el-col :span = "4"  style = "text-align:right;line-height:50px">*管理员姓名:</el-col>
-                <el-col :span = "15" :offset = "1">
+                <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">*管理员姓名:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.name"></el-input>    
                 </el-col>    
             </el-row>   
                 <el-row>
-                    <el-col :span = "4"  style = "text-align:right;line-height:50px">*管理员邮箱:</el-col>
-                <el-col :span = "15" :offset = "1">
+                    <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">*管理员邮箱:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.email"></el-input>    
                 </el-col>    
             </el-row>  
               <el-row>
-                <el-col :span = "4"  style = "text-align:right;line-height:50px">管理员手机号:</el-col>
-                <el-col :span = "15" :offset = "1">
+                <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">管理员手机号:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.phone" disabled></el-input>    
                 </el-col>    
             </el-row>  
              <el-row>
-                <el-col :span = "4"  style = "text-align:right;line-height:50px">备用联系人姓名:</el-col>
-                <el-col :span = "15" :offset = "1">
+                <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">备用联系人姓名:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.spareName" disabled></el-input>    
                 </el-col>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             </el-row>  
              <el-row>
-                <el-col :span = "4"  style = "text-align:right;line-height:50px">备用联系人手机:</el-col>
-                <el-col :span = "15" :offset = "1">
+                <el-col :span = "4"  class = "Text_title"  style = "text-align:right;line-height:50px">备用联系人手机:</el-col>
+                <el-col :span = "16" :offset = "1">
                     <el-input clearable v-model.lazy="shop.sparePhone" disabled></el-input>    
                 </el-col>    
             </el-row> 
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import {ufload} from '../../api/upyun'
+import {ufload} from '@/api/upyun'
 export default {
     data(){
         return {
@@ -164,5 +164,12 @@ export default {
     .info {
         height:630px;
         background:#ecf1f5;
+    }
+     .Text_title{
+        font-weight: 800;
+        font-size:16px;
+        color:#333;
+        /* text-shadow:1px 1px 3px #999; */
+        
     }
 </style>

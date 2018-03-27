@@ -13,15 +13,15 @@
                     </el-form-item>
                 </el-row>
                 <el-row>
-                <el-form-item label = "商品标题" prop = "shopTitle">
-                    <el-input v-model = "shopData.shopTitle" placeholder = "请输入商品标题" >
+                <el-form-item label = "商品标题" prop = "name">
+                    <el-input v-model = "shopData.name" placeholder = "请输入商品标题" >
                       <i slot = "suffix" class = "el-input__icon el-icon-goods "></i>
                     </el-input>
                 </el-form-item>
                 </el-row>
                 <el-row>
-                <el-form-item label = "商品市场价格" prop = "shopPrice">
-                    <el-input v-model = "shopData.shopPrice" placeholder = "请输入商品价格">
+                <el-form-item label = "商品市场价格" prop = "price">
+                    <el-input v-model = "shopData.price" placeholder = "请输入商品价格">
                         <el-col slot="append">元</el-col>
                     </el-input>
                 </el-form-item>
@@ -57,12 +57,12 @@
                 </el-form-item> -->
                 <!-- </el-row> -->
                 <el-row>
-                <el-form-item label = "商品描述" prop = "shopDesc">
+                <el-form-item label = "商品描述" prop = "descr">
                      <el-input
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 4}"
                         placeholder="请输入内容"
-                        v-model="shopData.shopDesc">
+                        v-model="shopData.descr">
                       
                     </el-input>
                     
@@ -70,21 +70,21 @@
                  </el-row>
                  <el-row>
                       <el-form-item label = "是否为团购商品：">
-                            <el-radio-group v-model="shopData.isShopGroup">
-                                  <el-radio-button border  :label = true >
+                            <el-radio-group v-model="shopData.isgroup">
+                                  <el-radio-button border  :label = 1 >
                                         是
                                   </el-radio-button>
-                                  <el-radio-button border :label= false>
+                                  <el-radio-button border :label= 0>
                                     否
                                   </el-radio-button>
                             </el-radio-group>
                       </el-form-item>
                  </el-row>
                   <transition name="bounce">
-                 <el-row v-if = "shopData.isShopGroup">
+                 <el-row v-if = "shopData.isgroup ==1">
                       <el-row>
-                        <el-form-item label = "团购价格" prop = "shopgroupPrice">
-                            <el-input v-model = "shopData.shopgroupPrice" placeholder = "请输入团购价格">
+                        <el-form-item label = "团购价格" prop = "grpuPrice">
+                            <el-input v-model = "shopData.grpuPrice" placeholder = "请输入团购价格">
                                 <el-col slot="append">元</el-col>
                                 
                             </el-input>
@@ -206,18 +206,20 @@
                       </el-form-item>
                     </el-row>
                   </el-row> -->
-                  <el-row v-if = "shopData.isShopGroup">
+                  <el-row v-if = "shopData.isgroup">
                     <hr/>
                     <el-form-item label = "团购人数">
-                          <el-input v-model="shopData.groupNum" disabled></el-input>
-                          <el-slider :min = '2' :max = '10' v-model="shopData.groupNum" 
+                          <el-input v-model="shopData.groupUserCount" disabled></el-input>
+                          <el-slider :min = '2' :max = '10' v-model="shopData.groupUserCount" 
                           :format-tooltip="formatTooltip"></el-slider>
                     </el-form-item>
+                    <el-row>
                     <el-form-item label = "单次限量">
-                        <el-input placeholder="请输入单次限量"></el-input>
+                        <el-input placeholder="请输入单次限量" v-model="shopData.singleCount"></el-input>
                     </el-form-item>
+                    </el-row>
                     <el-form-item label = "限购次数">
-                        <el-input placeholder="请输入限购次数"></el-input>
+                        <el-input placeholder="请输入限购次数" v-model="shopData.buyCount"></el-input>
                     </el-form-item>
                   </el-row>
                     <el-col :span = "24" style = "margin-top:20px;text-align:center">
@@ -232,21 +234,26 @@ import uploadComp from "../viewcomp/upload";
 import { ufload } from "../../../api/upyun";
 import $ from "jquery";
 import selectComp from "../smallcomp/select";
+import {promiseAjax} from "@/api/ajax";
+import { base_IP, base_port, base_uploadUrl } from "@/api/base";
 export default {
   data() {
     return {
       shopData: {
+        //手机号
+        phone:"",
+        type : "1",
         // 商品标题
-        shopTitle: "",
+        name: "",
         //商品市场价格
-        shopPrice: "",
+        price: "",
 
         //商品描述
-        shopDesc: "",
+        descr: "",
         //团购价格
-        shopGroupPrice: "",
+        grpuPrice: "",
         //商品是否是团购
-        isShopGroup: true,
+        isgroup: 1,
         //商品类型
         shopType: 1,
         // 选择几种规格
@@ -254,15 +261,27 @@ export default {
         //
         spec: [],
         //第一个规格
-        param1: "",
+        paramTitle1: "",
         //第二个规格
-        param2: "",
+        paramTitle2: "",
         //第三个规格
-        param3: "",
+        paramTitle3: "",
+        //规格一的参数
+        paramValues1:"",
+        paramValues2:"",
+        paramValues3:"",
         //商品规格标签
         tags: [[], [], []],
         //团购人数
-        groupNum: 2
+        groupUserCount: 2,
+        groupImgUrl:"",
+        // 商品主图轮播图
+        cover_url:"",
+        bannerUrls:"",
+        descrUrls:"",
+        //单次限量
+        singleCount:"",
+        buyCount:"",
       },
       //规格下拉
       specOptions: [
@@ -364,12 +383,13 @@ export default {
       changeImgList: [],
       changeImgiList: [],
       uploading: "",
+      imgGroupUrlTexT:"",
       rules: {
-        shopTitle: [
+        name: [
           { required: true, message: "请输入商品标题", trigger: "blur" },
           { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
         ],
-        shopPrice: [
+        price: [
           {
             required: true,
             message: "请输入商品金额",
@@ -381,7 +401,7 @@ export default {
             trigger: "blur"
           }
         ],
-        shopgroupPrice: [
+        grpuPrice: [
           {
             required: true,
             message: "请输入团购价格",
@@ -396,7 +416,7 @@ export default {
         shopWeight: [
           { required: true, message: "请输入商品重量", trigger: "blur" }
         ],
-        shopDesc: [
+        descr: [
           { required: true, message: "请输入商品描述", trigger: "blur" },
           { max: 30, message: "最多三十个字符", trigger: "blur" }
         ],
@@ -423,13 +443,13 @@ export default {
       let paramValue = "";
       switch (k) {
         case 0:
-          paramValue = this.param1;
+          paramValue = this.shopData.paramTitle1;
           break;
         case 1:
-          paramValue = this.param2;
+          paramValue = this.shopData.paramTitle2;
           break;
         case 2:
-          paramValue = this.param3;
+          paramValue = this.shopData.paramTitle3;
           break;
       }
 
@@ -439,8 +459,6 @@ export default {
       })
         .then(data => {
           let randomNum = Math.floor(Math.random() * 5);
-          console.log(randomNum);
-          console.log(data.value);
           let value = {
             name: data.value,
             type: ["", "success", "info", "warning", "danger"][randomNum]
@@ -448,19 +466,19 @@ export default {
           this.shopData.tags[k].push(value);
         })
         .catch(() => {
-          console.log(2);
         });
     },
     selectfunc(data) {
+      console.log(data);
       switch (data.index) {
         case 0:
-          this.param1 = data.optionSelect;
+          this.shopData.paramTitle1 = data.optionSelect;
           break;
         case 1:
-          this.param2 = data.optionSelect;
+          this.shopData.paramTitle2 = data.optionSelect;
           break;
         case 2:
-          this.param3 = data.optionSelect;
+          this.shopData.paramTitle3 = data.optionSelect;
           break;
       }
     },
@@ -494,9 +512,15 @@ export default {
     //这里是测试的，如果将来有问题 在重新改，目前来看是没有问题的
     upanyload(fileList, index) {
       return new Promise((resolve, reject) => {
+        
         ufload(fileList[index])
           .then(data => {
             if (JSON.parse(data).code == 200) {
+                if(index == 0) {
+                  this.imgGroupUrlTexT = JSON.parse(data).url
+                }else{
+                  this.imgGroupUrlTexT = this.imgGroupUrlTexT + ','+JSON.parse(data).url
+                }
               if (index < fileList.length - 1) {
                 index = index + 1;
                 return this.upanyload(fileList, index)
@@ -532,6 +556,7 @@ export default {
             ufload(this.groupimgAttr)
               .then(data => {
                 if (JSON.parse(data).code == 200) {
+                    this.shopData.groupImgUrl = JSON.parse(data).url;
                 } else {
                   this.uploading.close();
                   this.imgUpLoadErr();
@@ -543,19 +568,78 @@ export default {
               });
           }
 
-          if (this.changeImgList.length > 0 && this.changeImgiList.length > 0) {
+          if ((typeof this.indexBannerimgAttr == "object" && this.changeImgList.length > 0 
+          && this.changeImgiList.length > 0)) {
             this.loadingText = "正在上传图片";
             this.loading();
-            this.upanyload(this.changeImgList, 0)
+            ufload(this.indexBannerimgAttr).then((data)=>{
+              if(JSON.parse(data).code == 200){
+                this.shopData.cover_url = JSON.parse(data).url;
+                          this.upanyload(this.changeImgList, 0)
               .then(data => {
-                this.upanyload(this.changeImgiList, 0)
+                console.log(data);
+                this.shopData.bannerUrls = this.imgGroupUrlTexT;
+                this.upanyload(this.changeImgiList, 0,this.shopData.descrUrls)
                   .then(() => {
+                    this.shopData.descrUrls = this.imgGroupUrlTexT;
                     this.uploading.close();
                     this.loadingText = "上传成功，正在整理";
                     this.loading();
                     setTimeout(() => {
                       this.uploading.close();
-                      this.$router.push("/home/goods/goodsList");
+                      this.shopData.tags[0].map((item,index)=>{
+                          if(index == 0){
+                            this.shopData.paramValues1 =  item.name;
+                          }else{
+                            this.shopData.paramValues1 +=  ','+item.name;
+                          }
+                      })
+                       this.shopData.tags[1].map((item,index)=>{
+                          if(index == 0){
+                            this.shopData.paramValues2 =  item.name;
+                          }else{
+                            this.shopData.paramValues2 +=  ','+item.name;
+                          }
+                      })
+                       this.shopData.tags[2].map((item,index)=>{
+                          if(index == 0){
+                            this.shopData.paramValues3 =  item.name;
+                          }else{
+                            this.shopData.paramValues3 +=  ','+item.name;
+                          }
+                      })
+                      delete(this.shopData['tags']);
+                      console.log(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/createCargo`)
+                      promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/createCargo`,{
+                        'phone':this.shopData.phone,
+                        'name':this.shopData.name,
+                        'type':this.shopData.type,
+                        'price':this.shopData.price,
+                        'grpuPrice':this.shopData.grpuPrice,
+                        'isgroup':this.shopData.isgroup,
+                        'descr':this.shopData.descr,
+                        'groupImgUrl':this.shopData.groupImgUrl,
+                        'cover_url':this.shopData.cover_url,
+                        'bannerUrls':this.shopData.bannerUrls,
+                        'descrUrls':this.shopData.descrUrls,
+                        'paramTitle1':this.shopData.paramTitle1,
+                        'paramValues1':this.shopData.paramValues1,
+                        'paramTitle2':this.shopData.paramTitle2,
+                        'paramValues2':this.shopData.paramValues2,
+                        'paramTitle3':this.shopData.paramTitle3,
+                        'paramValues3':this.shopData.paramValues3,
+                        'groupUserCount':this.shopData.groupUserCount,
+                        'singleCount':this.shopData.singleCount,
+                        'buyCount':this.shopData.buyCount,
+                        
+                        
+                        
+                      }).then((data)=>{
+                        console.log(data);
+                      }).catch(()=>{
+                        console.log(2);
+                      });
+                      // this.$router.push("/home/goods/goodsList");
                     }, 500);
                   })
                   .catch(() => {
@@ -567,6 +651,16 @@ export default {
                 this.uploading.close();
                 this.imgUpLoadErr();
               });
+                
+              }else{
+                 this.uploading.close();
+                this.imgUpLoadErr();
+              }
+            }).catch(()=>{
+               this.uploading.close();
+                this.imgUpLoadErr();
+            })
+  
           } else {
             this.$message({
               type: "error",
@@ -630,6 +724,9 @@ export default {
   components: {
     uploadComp,
     selectComp
+  },
+  created(){
+    this.shopData.phone = JSON.parse(window.localStorage.pailewang_token).phone
   }
 };
 </script>
