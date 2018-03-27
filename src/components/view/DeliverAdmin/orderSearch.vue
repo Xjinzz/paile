@@ -1,5 +1,5 @@
 <template>
-    <el-col :span = "22" :offset = "1" class = "Text_title bower">
+    <el-col :span = "22" :offset = "1" class = "Text_title bower scrollbal">
         <el-row>{{title}}</el-row>
         <el-row>
             <!-- <el-form label-width="120px" :inline="true"  :rules="rules"  v-model="ruleForm" ref = "ruleForm" status-icon class="demo-ruleForm"> -->
@@ -84,7 +84,7 @@
                 </el-col>
             </el-row>
         </el-row>
-        <el-col v-if = "pover_show" style = "z-index:11;border-radius:10px;position:fixed;top:0;left:0;background:#fff;top:5%;height:80%;overflow-y:scroll" :span = "16" :offset="4">
+        <el-col v-if = "pover_show" class = "scrollbal" style = "z-index:11;border-radius:10px;position:fixed;top:0;left:0;background:#fff;top:5%;height:80%;overflow-y:scroll" :span = "16" :offset="4">
            <el-col :span = "22" :offset="1">
             <el-col style = "margin-top:20px;text-align:center">
                 订单详情
@@ -165,8 +165,10 @@
         
 
         </el-col>
-           <el-col @click = "poverHidden" v-if = "pover_show" style = "position:fixed;z-index:10;background:rgba(30,30,30,0.5);top:0;left:0;
-           height:100%"></el-col>
+           <el-button @click = "poverHidden" v-show = "pover_show" style = "width:100%;dispaly:inline-block;position:fixed;z-index:10;background:rgba(30,30,30,0.5);top:0;left:0;
+           height:100%">
+                
+           </el-button>
     </el-col>
 </template>
 
@@ -295,6 +297,7 @@ export default {
     },
     methods:{
         poverHidden(){
+            console.log(1);
             this.pover_show = false;
            
         },
@@ -348,7 +351,10 @@ export default {
         }
       .bower {
   height: 730px;
-  overflow-y: scroll;
+ 
+  }
+  .scrollbal{
+       overflow-y: scroll;
   position: relative;
   &::-webkit-scrollbar {
     width: 8px; /*滚动条宽度*/
