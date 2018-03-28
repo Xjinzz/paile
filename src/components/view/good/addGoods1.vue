@@ -4,7 +4,7 @@
   <el-col :span ="22" :offset ="1">
       <el-col :span ="20" :offset ="2" class = "top20" tag = "b">新建商品</el-col>
       <el-col  :span ="20" :offset="2" class = "top20" style = "line-height:30px;padding:20px 20px;background:#eee;">
-        <div>1</div>
+  
             <threeSelect 
             :normalTextColor="normalTextColor" 
             :normalbgColor="normalbgColor" 
