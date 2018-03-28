@@ -512,17 +512,28 @@ export default {
     //这里是测试的，如果将来有问题 在重新改，目前来看是没有问题的
     upanyload(fileList, index) {
       return new Promise((resolve, reject) => {
-        
-        ufload(fileList[index])
-          .then(data => {
+
+        ufload(fileList[Math.floor(index)])
+          .then(data => {    
+            console.log(1);  
             if (JSON.parse(data).code == 200) {
-                if(index == 0) {
-                  this.imgGroupUrlTexT = JSON.parse(data).url
+            console.log(Math.floor(index) == 0);
+               
+              
+                if(Math.floor(index) == 0) {
+                  console.log('测试：')
+                  this.imgGroupUrlTexT = `${base_uploadUrl}`+JSON.parse(data).url
+                  console.log('第一张图片:'+this.imgGroupUrlTexT);
                 }else{
-                  this.imgGroupUrlTexT = this.imgGroupUrlTexT + ','+JSON.parse(data).url
+                  this.imgGroupUrlTexT = this.imgGroupUrlTexT + ','+ `${base_uploadUrl}`+JSON.parse(data).url
+    console.log('测试2：'+ this.imgGroupUrlTexT)
                 }
-              if (index < fileList.length - 1) {
-                index = index + 1;
+              if (Math.floor(index) < fileList.length - 1) {
+          
+                
+                index = Math.floor(index) + 1;
+          
+                
                 return this.upanyload(fileList, index)
                   .then(data => {
                     return resolve();
@@ -556,7 +567,7 @@ export default {
             ufload(this.groupimgAttr)
               .then(data => {
                 if (JSON.parse(data).code == 200) {
-                    this.shopData.groupImgUrl = JSON.parse(data).url;
+                    this.shopData.groupImgUrl =  `${base_uploadUrl}`+JSON.parse(data).url;
                 } else {
                   this.uploading.close();
                   this.imgUpLoadErr();
@@ -573,17 +584,21 @@ export default {
             this.loadingText = "正在上传图片";
             this.loading();
             ufload(this.indexBannerimgAttr).then((data)=>{
+            
               if(JSON.parse(data).code == 200){
-                this.shopData.cover_url = JSON.parse(data).url;
-                          this.upanyload(this.changeImgList, 0)
+               
+               
+                this.shopData.cover_url = `${base_uploadUrl}`+JSON.parse(data).url;
+                          this.upanyload(this.changeImgList,'0')
               .then(data => {
-                console.log(data);
+                  
                 this.shopData.bannerUrls = this.imgGroupUrlTexT;
-                this.upanyload(this.changeImgiList, 0,this.shopData.descrUrls)
+                this.upanyload(this.changeImgiList,'0')
                   .then(() => {
                     this.shopData.descrUrls = this.imgGroupUrlTexT;
                     this.uploading.close();
                     this.loadingText = "上传成功，正在整理";
+                    
                     this.loading();
                     setTimeout(() => {
                       this.uploading.close();

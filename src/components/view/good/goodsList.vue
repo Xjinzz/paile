@@ -6,14 +6,14 @@
             <el-col :span = "22" :offset="1">
                 <el-row  style = "background:#eee;">
                 <el-form :model = "goods" label-width="80px" style = "margin-top:20px;">
-                    <el-col :span = "8" :offset="1">
+                    <!-- <el-col :span = "8" :offset="1">
                         <el-form-item label = "商品id">
                             <el-input clearable  v-model="goods.id">
                                 <i slot = "prefix" class= "el-icon-search"></i>
                             </el-input>
                         </el-form-item>
                         
-                    </el-col>
+                    </el-col> -->
                      <el-col :span = "8" :offset="1">
                         <el-form-item label = "商品名称">
                             <el-input clearable  v-model="goods.name">
@@ -29,10 +29,13 @@
                 </el-form>
                 </el-row>
                 <el-row class = "top20">
-                    <el-radio-group v-model="goods.type" size = "mini" @change = "typeChange">
-                        <el-radio label = "1" border>全部</el-radio>
-                        <el-radio label = "2" border>上架</el-radio>
-                        <el-radio label = "3" border>售罄</el-radio>
+                    <el-radio-group v-model="goods.type" size = "mini" @change = "con">
+                        <el-radio label = "0" border>全部</el-radio>
+                        <el-radio label = "1" border>待审核</el-radio>
+                        <el-radio label = "2" border>已审核</el-radio>
+                        
+                        <el-radio label = "3" border>上架</el-radio>
+                        <!-- <el-radio label = "3" border>售罄</el-radio> -->
                         <el-radio label = "4" border>下架</el-radio>
                         
                     </el-radio-group>
@@ -57,44 +60,44 @@
                         :header-cell-style = "headerStyle"
                         style="width: 100%" max-height = 450 size = "mini">
                         <el-table-column
-                            prop="goodId"
+                            prop="id"
                             label="商品id"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="goodName"
+                            prop="name"
                             label="商品名称"
                             >
                             <template slot-scope="scope">
-                                <el-button type = "text" @click = "goodShow(scope.row)">{{ scope.row.goodName }}</el-button>
+                                <el-button type = "text" @click = "goodShow(scope.row)">{{ scope.row.name }}</el-button>
                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="goodPrice"
+                            prop="price"
                             label = "商品价格"
                            >
                         </el-table-column>
                           <el-table-column
-                            prop="goodTeamPrice"
+                            prop="group_price"
                             label = "团购价格"
                            >
                         </el-table-column>
                           <el-table-column
-                            prop="goodSurplus"
+                            prop="rate1"
                             label = "库存"
                            >
                         </el-table-column>
                         <el-table-column
-                            prop="goodSales"
+                            prop="rate1"
                             label = "销量"
                            >
                         </el-table-column>
                         <el-table-column
-                            prop="goodType"
+                            prop="type"
                             label = "状态"
                            >
                            <template slot-scope="scope">
-                                {{ scope.row.goodType ==2?'上架':scope.row.goodType ==3?'售罄':'下架' }}
+                                {{ scope.row.type ==1?'待审核':scope.row.goodType ==2?'已审核':scope.row.goodType ==3?'上架':"下架" }}
                            </template>
                         </el-table-column>
                          <el-table-column
@@ -104,23 +107,18 @@
                            >
                             <template slot-scope="scope">
                                 <el-button type = "text">编辑</el-button>
-                                <el-button type = "text" @click = "changeType(scope.row)">{{scope.row.goodType == 2?'下架':'上架'}}</el-button>
+                                <el-button type = "text" @click = "changeType(scope.row)">{{scope.row.type == 3?'下架':'上架'}}</el-button>
                             </template>
                         </el-table-column>
-
-
-
-
-
                     </el-table>
                     <el-col style = "text-align:center" class = "top20">
                     <el-pagination
                         background
-                        :page-size="7"
+                        :page-size="5"
                         :current-page = "currentPage"
                         @current-change = "toogleCurrent"
-                        layout="total,prev, pager, next, -> ,jumper"
-                        :total="this.goodsData.length">
+                        layout="prev, next"
+                        :total="100">
                     </el-pagination>
                     </el-col>
                 </el-row>
@@ -138,12 +136,13 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
       goods: {
         id: "",
         name: "",
-        type: "1"
+        type: "0"
       },
       // 是否关闭了message
       errorClose: true,
       // 翻页的当前页
       currentPage: 2,
+      tableData:[],
       headerStyle: {
         background: "#ecf1f5",
         border: "0px solid #333",
@@ -157,29 +156,26 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
         overflow: "hidden"
       },
       start: 0,
-      end: 1,
-      showListNum: 7,
+      showListNum: 5,
       hasTerm: 0,
       goodsData: [],
       backupData: []
     };
   },
   methods: {
+    con(){
+      console.log(this.goods.type)
+    },
     toogleCurrent(val) {
-      this.start = val - 1;
-      this.end = val;
+      this.start = (val - 1) * this.showListNum;
+       this.getGoodsData();
     },
     filterData() {
       // 判断用户是清空条件的查询。还是在已经返回全部列表的清空下继续点击查询
-      promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/getCargoByPhone`,{
-        phone:'17695518131',
-        index:0,
-      }).then(data=>{
-        console.log(data);
-      })
+
       if (this.errorClose) {
         //判断用户是否没有点击关闭，防止暴力测试
-        if (this.goods.id.length == 0 && this.goods.name.length == 0) {
+        if (this.goods.name.length == 0) {
           if (this.hasTerm == 0) {
             this.errorClose = false;
             this.$message.error({
@@ -191,53 +187,49 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
                 this.errorClose = true;
               }
             });
-          } else {
-            this.hasTerm = 0;
-            this.goodsData = this.$store.state.goodsMd.goodsList;
           }
         } else {
-          this.hasTerm = 1;
-          this.currentPage = 1;
-          //将按钮选择上架下架的按钮重置掉
-          this.goods.type = 0;
-          this.goodsData = this.$store.state.goodsMd.goodsList.filter(item => {
-            if (this.goods.id.length != 0 && this.goods.name.length != 0) {
-              return (
-                item.goodId.includes(this.goods.id) ||
-                item.goodName.includes(this.goods.name)
-              );
-            } else if (this.goods.id.length != 0) {
-              return item.goodId.includes(this.goods.id);
-            } else if (this.goods.name.length != 0) {
-              return item.goodName.includes(this.goods.name);
-            }
-          });
-          this.backupData = this.goodsData;
-        }
-      } else return false;
+          this.start = 0;
+            this.getGoodsData();
+          this.hasTerm = 0;
+          this.currentPage = 0;
+
+       
+      } 
+      }else return false;
     },
-    typeChange(val) {
-      if (val == 1) {
-        this.goodsData = this.backupData;
-        return false;
-      } else {
-        this.goodsData = this.backupData.filter(item => {
-          return item.goodType == val;
-        });
-      }
-    },
+    getGoodsData(){
+      
+       promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/getCargoByPhone`,{
+            phone : JSON.parse(localStorage.getItem('pailewang_token')).phone,
+            name : this.goods.name,
+            status : this.goods.type,
+            index:this.start,
+            length:this.showListNum
+          }).then((data)=>{
+            console.log(data);
+            if(data.code == "0"){
+              this.tableData = data.datas;
+            }else{
+            }   
+          })
+        },
+        taggleType(val){
+          promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/changeCargoStatus`,val).then(data=>{
+              if(data.code == 0){
+                  this.getGoodsData();
+              }
+          })
+        },
     changeType(row) {
-      if (row.goodType == 2) {
-        this.$store.dispatch("goodTypeChangeAjax", {
-          index: row.goodId,
-          goodTypeCode: 4
-        });
-      } else {
-        this.$store.dispatch("goodTypeChangeAjax", {
-          index: row.goodId,
-          goodTypeCode: 2
-        });
-      }
+        if(row.status == 1 || row.status == 2){
+            row.status = 3;
+        }
+        let val = {
+          status : row.status,
+          cargoId : row.id,
+        }
+         this.taggleType(val);
     },
     goodShow(row) {
       let url = "/home/goods/goodsList/" + row.goodId;
@@ -245,18 +237,13 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
     }
   },
   computed: {
-    tableData() {
-      return this.goodsData.slice(
-        this.start * this.showListNum,
-        this.end * this.showListNum
-      );
-    }
+
   },
 
   created() {
       
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
