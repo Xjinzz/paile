@@ -30,7 +30,7 @@
                     :on-change = "checkImg"
                     >
                      <el-col :span = "16" :offset="8"> 
-                          <img v-bind:src="imgUrl" alt="" width = "100px" height = "100px">
+                          <img v-bind:src="imgUrl" alt="" width = "100px" height = "100px" style="margin-left:8px">
                     </el-col>
                 </el-upload>
       
@@ -71,8 +71,8 @@
                     <el-input clearable v-model.lazy="shop.sparePhone" disabled></el-input>    
                 </el-col>    
             </el-row> 
-            <el-row style = "text-align : center;">
-                  <el-button type="danger" @click = "save">保存</el-button>    
+            <el-row style = "margin-top:20px;">
+                  <el-button style=" width:150px;margin-left:40px" type="danger" @click = "save">保存</el-button>    
             </el-row> 
         </el-col>
     </el-col>

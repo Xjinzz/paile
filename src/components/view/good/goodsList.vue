@@ -4,16 +4,16 @@
             <h3>商品列表</h3>
             <el-row>
             <el-col :span = "22" :offset="1">
-                <el-row  style = "background:#eee;">
+                <el-row  style = "background:#eee;margin-top:20px;">
                 <el-form :model = "goods" label-width="80px" style = "margin-top:20px;">
-                    <el-col :span = "8" :offset="1">
+                    <!-- <el-col :span = "8" :offset="1">
                         <el-form-item label = "商品id">
                             <el-input clearable  v-model="goods.id">
                                 <i slot = "prefix" class= "el-icon-search"></i>
                             </el-input>
                         </el-form-item>
                         
-                    </el-col>
+                    </el-col> -->
                      <el-col :span = "8" :offset="1">
                         <el-form-item label = "商品名称">
                             <el-input clearable  v-model="goods.name">
@@ -29,12 +29,11 @@
                 </el-form>
                 </el-row>
                 <el-row class = "top20">
-                    <el-radio-group v-model="goods.type" size = "mini" @change = "typeChange">
+                    <el-radio-group style="margin-left:-20px" v-model="goods.type" size = "mini" @change = "typeChange">
                         <el-radio label = "1" border>全部</el-radio>
                         <el-radio label = "2" border>上架</el-radio>
                         <el-radio label = "3" border>售罄</el-radio>
                         <el-radio label = "4" border>下架</el-radio>
-                        
                     </el-radio-group>
                 </el-row>
                 
@@ -98,7 +97,6 @@
                            </template>
                         </el-table-column>
                          <el-table-column
-                        
                             label = "操作"
                             width = "120"
                            >
@@ -115,12 +113,13 @@
                     </el-table>
                     <el-col style = "text-align:center" class = "top20">
                     <el-pagination
+                        style="margin-right:20px"
                         background
-                        :page-size="7"
+                        :page-size="10"
                         :current-page = "currentPage"
                         @current-change = "toogleCurrent"
-                        layout="total,prev, pager, next, -> ,jumper"
-                        :total="this.goodsData.length">
+                        layout="prev, next"
+                        :total="20">
                     </el-pagination>
                     </el-col>
                 </el-row>
@@ -131,8 +130,11 @@
 </template>
 
 <script>
+var userPhone = JSON.parse(localStorage.pailewang_token);
+userPhone = userPhone.phone;
 import {promiseAjax} from "@/api/ajax";
-import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
+import { base_IP, base_port, base_uploadUrl } from "@/api/base";
+export default {
   data() {
     return {
       goods: {
@@ -149,20 +151,22 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
         border: "0px solid #333",
         color: "#333",
         textAlign: "center",
-        fontWeright: "0"
+        fontWeright: "0",
       },
       cellStyle: {
         color: "#333",
         textAlign: "center",
-        overflow: "hidden"
+        overflow: "hidden",
       },
       start: 0,
       end: 1,
-      showListNum: 7,
+      showListNum: 10,
       hasTerm: 0,
       goodsData: [],
-      backupData: []
+      backupData: [],
+      tableData:[],
     };
+
   },
   methods: {
     toogleCurrent(val) {
@@ -242,20 +246,40 @@ import { base_IP, base_port, base_uploadUrl } from "@/api/base";export default {
     goodShow(row) {
       let url = "/home/goods/goodsList/" + row.goodId;
       this.$router.push(url);
+    },
+    getGoodsList(){
+      promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/getCargoByPhone`,{
+        phone: userPhone,
+        index: 0,
+        length: 10
+      }).then(data=>{
+        if(data.code == 0){
+          this.goodsData = data.datas;
+        }else{
+          return;
+        }
+      })
     }
   },
-  computed: {
-    tableData() {
-      return this.goodsData.slice(
-        this.start * this.showListNum,
-        this.end * this.showListNum
-      );
+  watch:{
+    start: function () {
+      promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/cargoHandler/getCargoByPhone`,{
+        phone: userPhone,
+        index: this.start * this.showListNum,
+        length: 10
+      }).then(data=>{
+        if(data.code == 0){
+          if(data.datas.length == 0){
+            this.$alert('已经是最后一页了','拍乐网提示您：',{});
+          }else{
+            this.goodsData = data.datas;
+          }
+        }else{
+          return;
+        }
+      })
     }
   },
-
-  created() {
-      
-  }
 };
 </script>
 

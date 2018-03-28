@@ -53,8 +53,8 @@
                      </el-form-item>
                 </el-form>
                  </el-col>
-                 <el-col :span = "24" style = "text-align:center;">
-                     <el-button type="danger" @click = "save">保存</el-button>
+                 <el-col :span = "24" style = "margin-top:20px">
+                     <el-button style="width:150px;" type="danger" @click = "save">保存</el-button>
                  </el-col>
             </el-col>
             </el-col>

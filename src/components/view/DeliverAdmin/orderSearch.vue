@@ -7,14 +7,17 @@
                 <el-form-item label = "订单编号"  prop="number">
                     <el-input :rows="1" v-model="ruleForm.number"></el-input>
                 </el-form-item>
+                <br>
                 <el-form-item label = "收货手机号"  prop="phone">
                     <el-input :rows="1" v-model="ruleForm.number"></el-input>
                 </el-form-item>
+                <br>
                 <el-form-item label = "订单状态"  prop="phone">
-                    <el-select v-model = "ruleForm.static" placeholder="请选择订单状态">
+                    <el-select style="width:206px;" v-model = "ruleForm.static" placeholder="请选择订单状态">
                         <el-option :label = "option.label" :value = "option.value" v-for = "(option,index) in static_option" :key = "index"></el-option>
                     </el-select>
                 </el-form-item>
+                <br>
                 <el-form-item label = "成团时间"  prop="timer">
                         <el-date-picker
                         v-model="ruleForm.timer"
@@ -22,19 +25,18 @@
                         range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        format="yyyy 年 MM 月 dd 日">
-
+                        format="yyyy 年 MM 月 dd 日" >
                         </el-date-picker>
                 </el-form-item>
-                <el-row style = "text-align:center;">
-                    <el-button type = "danger" @click = "search">查询</el-button>
+                <el-row style = "margin-left:50px">
+                    <el-button style="width:100px;background:#DD2525" type = "danger" @click = "search">查询</el-button>
                 </el-row>
             </el-form>
         </el-row>
         <el-row style = "margin-top:20px;" v-if = "searched">
-            <el-row>查询结果</el-row>
-            <el-row>
-                共查到{{reqNumber}}条数据
+            <el-row style="">查询结果</el-row>
+            <el-row style="color:#606266;margin-left:50px">
+                共查到<b style="color:red"> {{reqNumber}} </b>条数据
             </el-row>
             <el-row style = "margin-top:20px;">
                 <el-col :span = "22" :offset="1">
