@@ -6,6 +6,7 @@
       <el-col  :span ="20" :offset="2" class = "top20" style = "line-height:30px;padding:20px 20px;background:#eee;">
         <div>1</div>
         <div>2</div>
+        <div>3</div>
             <threeSelect 
             :normalTextColor="normalTextColor" 
             :normalbgColor="normalbgColor" 
