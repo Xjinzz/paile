@@ -34,6 +34,7 @@ const login = () =>
  * 订单查询
  * */ 
 const orderSearch = () =>import ('@/components/view/DeliverAdmin/orderSearch')
+const groupGoodList = () => import('@/components/view/DeliverAdmin/groupGoodList')
 Vue.use(Router)
 
 const router = new Router({
@@ -58,6 +59,14 @@ const router = new Router({
             title:"订单查询",
           },
           num: "1-1",
+        },{
+          path:"/groupGoodList",
+          component:groupGoodList,
+          name:"团购列表",
+          meta:{
+            title:"团购列表",
+          },
+          num: "1-2",
         }]
       },{
           num: '2',
@@ -99,16 +108,7 @@ const router = new Router({
           ],
 
         },
-        {
-          path: "/login",
-          name: "商家登陆",
-          component: login,
-          meta: {
-            title: "欢迎登陆拍乐网"
-          },
-          num: "4"
 
-        },
         {
           path: "/home",
           name: "商品管理",
@@ -174,7 +174,17 @@ const router = new Router({
           meta: {
             title: "商户注册"
           },
-        }, {
+        }, 
+        {
+          path: "/login",
+          name: "商家登陆",
+          component: login,
+          meta: {
+            title: "欢迎登陆拍乐网"
+          },
+          num: "4"
+
+        },{
           path: "/nextRegistration",
           component: nextRegistration,
           beforeEnter: (to, from, next) => {

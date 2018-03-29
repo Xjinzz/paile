@@ -51,21 +51,21 @@
 export default {
     data(){
         return {
-            shopImgUrl:"",
+            shopImgUrl:"/static/userHeader.png",
             shopImgText:"店铺名"
         }
     },
 
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     }
   },
   created() {
-    console.log(this.$router.options.routes[0].children);
+    // console.log(this.$router.options.routes[0].children);
   }
 };
 </script>

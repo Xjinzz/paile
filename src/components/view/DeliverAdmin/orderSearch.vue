@@ -1,32 +1,34 @@
 <template>
     <el-col :span = "22" :offset = "1" class = "Text_title bower scrollbal">
         <el-row>{{title}}</el-row>
-        <el-row>
+        <el-row style="font-weight: normal;">
             <!-- <el-form label-width="120px" :inline="true"  :rules="rules"  v-model="ruleForm" ref = "ruleForm" status-icon class="demo-ruleForm"> -->
                 <el-form :model="ruleForm" :inline= true :rules="rules" ref="ruleForm" label-width="120px" status-icon class="demo-ruleForm">
-                <el-form-item label = "订单编号"  prop="number">
-                    <el-input :rows="1" v-model="ruleForm.number"></el-input>
+                <el-form-item label = "订单编号">
+                    <el-input :rows="1" v-model="ruleForm.orderNo"></el-input>
+                </el-form-item>
+                <el-form-item label = "收货手机号">
+                    <el-input :rows="1" v-model="ruleForm.customerPhone"></el-input>
                 </el-form-item>
                 <br>
-                <el-form-item label = "收货手机号"  prop="phone">
-                    <el-input :rows="1" v-model="ruleForm.number"></el-input>
-                </el-form-item>
-                <br>
-                <el-form-item label = "订单状态"  prop="phone">
-                    <el-select style="width:206px;" v-model = "ruleForm.static" placeholder="请选择订单状态">
+                <el-form-item label = "订单状态">
+                    <el-select style="width:206px;" v-model = "ruleForm.status" placeholder="请选择订单状态">
                         <el-option :label = "option.label" :value = "option.value" v-for = "(option,index) in static_option" :key = "index"></el-option>
                     </el-select>
                 </el-form-item>
                 <br>
-                <el-form-item label = "成团时间"  prop="timer">
+                <el-form-item label = "成团时间">
                         <el-date-picker
                         v-model="ruleForm.timer"
                         type="daterange"
                         range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        format="yyyy 年 MM 月 dd 日" >
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="yyyy-MM-dd">
                         </el-date-picker>
+
+
                 </el-form-item>
                 <el-row style = "margin-left:50px">
                     <el-button style="width:100px;background:#DD2525" type = "danger" @click = "search">查询</el-button>
@@ -35,52 +37,51 @@
         </el-row>
         <el-row style = "margin-top:20px;" v-if = "searched">
             <el-row style="">查询结果</el-row>
-            <el-row style="color:#606266;margin-left:50px">
+            <!-- <el-row style="color:#606266;margin-left:36px;font-weight:normal">
                 共查到<b style="color:red"> {{reqNumber}} </b>条数据
-            </el-row>
-            <el-row style = "margin-top:20px;">
+            </el-row> -->
+            <el-row style = "margin:20px 0 20px 0;font-weight:normal">
                 <el-col :span = "22" :offset="1">
                     <el-col  v-for = "(data,index) in searchData" :key = "index" style = "margin-top:20px;text-align:center;">
-                        <el-row>
-                        <el-col :span = "8">
-                            订单编号:{{data.number}}
-                        </el-col>
-                        <el-col :span = "8">
-                            成团时间:{{data.groupTime}}
-                        </el-col>
-                        <el-col :span = "8">
-                            收货人:{{data.user}}
-                        </el-col>
-                        </el-row>
-                    <table  cellspacing="0px" class = "tableBox" 
-                    :class ="border?'tdBorder':''">
-                        <tr style = "background:#efefef">
-                            <th>商品id</th>
-                            <th>商品名称</th>
-                            <th>订单状态</th>
-                            <th>商品总价(元)</th>
-                            <th>数量</th>
-                            <th>实收金额(元)</th>
-                            <th>操作</th>                                                     
-                        </tr>
-                        <tr v-for = "(item,index) in data.data" :key = "index">
-                            <td>
-                                <p>{{item.goodID}}</p>
-                                <img :src="item.goodImgUrl" alt="商品展示图">
-                            </td>
-                            <td>{{item.name}}</td>
-                            <td>{{data.static}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.count}}</td>
-                            <td>{{item.money}}</td>
-                            <td>
-                                <el-button type="text" @click = "btnClick(data)">
-                                    查看
-                                </el-button>
-                            </td>                                                     
-                        </tr>
-                    </table>
-                   
+                                <el-row style = "margin:10px 0 20px 0s;">
+                                    <el-col :span = "8">
+                                        订单编号:{{data.orderNo}}
+                                    </el-col>
+                                    <el-col :span = "8">
+                                        成团时间:{{data.createTimeStr}}
+                                    </el-col>
+                                    <el-col :span = "8">
+                                        收货人:{{data.customerName}}
+                                    </el-col>
+                                </el-row>
+                                <table  cellspacing="0px" class = "tableBox" 
+                                :class ="border?'tdBorder':''" style="font-size:12px;line-height: 25px;">
+                                    <tr style = "background:#efefef;height:30px">
+                                        <th style="width:15%">商品id</th>
+                                        <th style="width:30%">商品名称</th>
+                                        <th style="width:10%">订单状态</th>
+                                        <th style="width:10%">商品总价(元)</th>
+                                        <th style="width:10%">数量</th>
+                                        <th style="width:15%">实收金额(元)</th>
+                                        <th style="width:10%">操作</th>                                                     
+                                    </tr>
+                                    <tr v-for = "(item,index) in data.cargoList" :key = "index" >
+                                        <td>
+                                            <p>{{item.shop_id}}</p>
+                                            <img :src="item.cover_url" style="width:50px; height:50px" alt="商品展示图">
+                                        </td>
+                                        <td style="text-align: left; padding: 0 2%">{{item.name}}</td>
+                                        <td>{{data.status|type}}</td>
+                                        <td>{{item.price}}</td>
+                                        <td>{{item.count}}</td>
+                                        <td>{{item.price}}</td>
+                                        <td>
+                                            <el-button type="text" @click = "btnClick(index)">
+                                                查看
+                                            </el-button>
+                                        </td>                                                     
+                                    </tr>
+                                </table>
                     </el-col>
                   
                 </el-col>
@@ -92,96 +93,75 @@
                 订单详情
             </el-col>
             <el-row>
-                <!-- 
-                     number:"1001",
-                    groupTime:"2018-02-26",
-                    user:"啊什顿",
-                    buyTime : '2018-02-03 10:00',
-                    confirmTime:'2018-02-03 10:00',
-                    data:[
-
-                    {
-                    goodID:'1111',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                    static:"待发货",
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00",
-                    
-                 -->
-                <el-col :span = "6">
-                    店铺名称:{{poverData.name}}
+                <el-col :span = "4">
+                    店铺名称:　{{poverData.shopName}}
                 </el-col>
                 
-                <el-col :span = "6">
-                    订单单号:{{poverData.number}}
+                <el-col :span = "8">
+                    订单单号:　{{poverData.orderNo}}
                 </el-col>
                 
-                <el-col :span = "6">
-                    订单状态:{{poverData.static}}
+                <el-col :span = "5">
+                    订单状态:　{{poverData.status|type}}
+                </el-col>
+                 <el-col :span = "7">
+                    收货人手机号:　{{poverData.customerPhone}}
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span = "6">
-                    下单时间:{{poverData.groupTime}}
+                <el-col :span = "8">
+                    下单时间:　{{poverData.createTimeStr}}
                 </el-col>
-                <el-col :span = "6">
-                    付款时间:{{poverData.buyTime}}
+                <el-col :span = "8">
+                    付款时间:　{{poverData.createTimeStr}}
                 </el-col>
-                <el-col :span = "6">
+                <!-- <el-col :span = "6">
                     成团时间:{{poverData.groupTime}}
-                </el-col>
-                <el-col :span = "6">
-                    确认时间:{{poverData.confirmTime}}
+                </el-col> -->
+                <el-col :span = "8">
+                    确认时间:　{{poverData.createTimeStr}}
                 </el-col>
             </el-row>
             <el-row>
                  <table  cellspacing="0px" class = "tableBox" 
-                    :class ="border?'tdBorder':''">
+                    :class ="border?'tdBorder':''" style="font-size:12px;line-height: 25px;">
                         <tr style = "background:#efefef">
-                            <th>商品id</th>
-                            <th>商品名称</th>
-                            <th>订单状态</th>
-                            <th>商品总价(元)</th>
-                            <th>数量</th>
-                            <th>实收金额(元)</th>                                                  
+                            <th style="width:25%">商品id</th>
+                            <th style="width:30%">商品名称</th>
+                            <th style="width:10%">订单状态</th>
+                            <th style="width:10%">商品总价(元)</th>
+                            <th style="width:10%">数量</th>
+                            <th style="width:15%">实收金额(元)</th>
                         </tr>
-                        <tr v-for = "(item,index) in poverData.data" :key = "index">
+                        <tr v-for = "(item,index) in poverData.cargoList" :key = "index">
                             <td>
-                                <p>{{item.goodID}}</p>
-                                <img :src="item.goodImgUrl" alt="商品展示图">
+                                <p>{{item.id}}</p>
+                                <img :src="item.cover_url" alt="商品展示图" style="width:50px; height:50px">
                             </td>
-                            <td>{{item.name}}</td>
-                            <td>{{item.static}}</td>
+                            <td style="text-align: left; padding: 0 2%">{{item.name}}</td>
+                            <td>{{item.static|type}}</td>
                             <td>{{item.price}}</td>
                             <td>{{item.count}}</td>
-                            <td>{{item.money}}</td>
-                                                               
+                            <td>{{item.price}}</td>
                         </tr>
                     </table>
-
-
             </el-row>
            </el-col>
-        
-
         </el-col>
-           <el-button @click = "poverHidden" v-show = "pover_show" style = "width:100%;dispaly:inline-block;position:fixed;z-index:10;background:rgba(30,30,30,0.5);top:0;left:0;
-           height:100%">
-                
-           </el-button>
+        <el-button @click = "poverHidden" v-show = "pover_show" style = "width:100%;dispaly:inline-block;position:fixed;z-index:10;background:rgba(30,30,30,0.5);top:0;left:0;height:100%"></el-button>
     </el-col>
 </template>
 
 <script>
+import {promiseAjax} from "@/api/ajax";
+import { base_IP, base_port, base_uploadUrl } from "@/api/base";
 export default {
     data(){
         return {
             pover_show:false,
             //弹出层的数据
-            poverData:{},
-            // 查询到多少条数据
+            poverData:[],
+            //弹出层请求的数据
             reqNumber:0,
             //是否有边框
             border:true,
@@ -193,129 +173,85 @@ export default {
                label : '全部',
                value : "0" 
             },{
-               label : '无售后/售后处理中',
-               value : "1" 
+               label : '待取货',
+               value : "3" 
             },{
-                label : "无售后/取消售后",
-                value : "2"
-            },{
-                label :"售后处理中",
-                value : "3",
-            },{
-                label:"退款成功",
+                label : "待评价",
                 value : "4"
+            },{
+                label :"已评价",
+                value : "6",
             }],
             searchData:[
-                {
-                    number:"1001",
-                    groupTime:"2018-02-26",
-                    user:"啊什顿",
-                     static:"待发货",
-                     buyTime : '2018-02-03 10:00',
-                    confirmTime:'2018-02-03 10:00',
-
-                    data:[
-
-                    {
-                    goodID:'1111',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                   
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00",
-                    
-
-                },{
-                    goodID:'1111',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                  
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00"
-
-                },{
-                    goodID:'1111',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00"
-
-                },]
-                },
-                 {
-                      number:"1002",
-                    groupTime:"2018-02-27",
-                    user:"张三",
-                     static:"待发货",
-                     buyTime : '2018-02-03 10:00',
-                    confirmTime:'2018-02-03 10:00',
-                     data:[{
-                    goodID:'2222',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00"
-
-                }],
-                 },
-                 {
-                       number:"1003",
-                    groupTime:"2018-02-28",
-                    user:"李四",
-                     static:"待发货",
-                     buyTime : '2018-02-03 10:00',
-                    confirmTime:'2018-02-03 10:00',
-                     data: [{
-                    goodID:'3333',
-                    goodImgUrl:"xx",
-                    name:"i7/xxxx",
-                    price:"6999.00",
-                    count:"1",
-                    money:"6999.00"
-
-                }],
-
-                 }
                  
             ],
         ruleForm:{
-            number:"",
-            static:"",
-            timer:[],
+            orderNo:"",
+            customerPhone:"",
+            phone:"",
+            timer:['',''],
         },
+        start:0,
+        dataList:10,
         rules:{
             number:[
                 { required: true, message: "请输入订单编号", trigger: "blur" }
             ],
-            
-
         },
+        }
+    },
+    filters:{
+        type(val){
+            if(val == 3){
+                return '待取货'
+            }else if(val == 4){
+                return "待评价"
+            }else if(val == 5){
+                return '已评价'
+            }else{
+                return '暂无状态'
+            }
         }
     },
     methods:{
         poverHidden(){
-            console.log(1);
             this.pover_show = false;
-           
         },
         shopNameOut(){
 
         },
         search(){
+            this.getSearchData();
         },
-        btnClick(row){
-            
-           this.poverData = row;
+        btnClick(index){
+            this.poverData = this.searchData[index];
            this.pover_show = !this.pover_show;
+        },
+        getSearchData(){
+            promiseAjax(`http://${base_IP}:${base_port}/paile-service/api/orderHandler/getAllOrderByPhone`,{
+                phone :JSON.parse(localStorage.getItem('pailewang_token')).phone,
+                orderNo:this.ruleForm.orderNo,
+                status: this.ruleForm.status,
+                customerPhone:this.ruleForm.customerPhone,
+                startTime:this.ruleForm.timer[0],
+                endTime:this.ruleForm.timer[1],
+                index:this.start,
+                length:this.dataList,
+            }).then(data=>{
+               
+                console.log(data);
+                if(data.code == 0){
+                    this.searchData = data.datas;
+                    // console.log(this.searchData);
+                }else{
+                    return;
+                }
+            })
         }
     },
     created(){
-        console.log(this.border);
+        //console.log(this.border);
+        this.getSearchData();
     },
     computed:{
         title(){
