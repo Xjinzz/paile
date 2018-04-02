@@ -91,13 +91,13 @@
                             </el-input>
                         </el-form-item>
                       </el-row>
-                      <el-row>
+                      <el-row style = "margin-top:20px;">
                         <el-col :span = "24">
-                                    <el-form-item label = "商品团购图">
-                                        <el-col :span = "9" :offset = '1'>
+                                    <el-form-item label = "商品团购图" >
+                                        <el-col :span = "9" :offset = '0'>
                                             <uploadComp @imgReady = "groupimgReady"  action = "http://www.paile.com"  style = "width:360px;height:90px;margin-left:122px; margin-top:-30px"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                                         </el-col>
-                                        <el-col :span = "12" :offset = '2' style="margin-top:-20px">
+                                        <el-col :span = "12" :offset = '1' style="margin-top:-20px">
                                             尺寸要求：<br/>宽：750px；高度在340-360px之间，<br/>图片支持：jpg格式  
                                         </el-col>
                                     </el-form-item>
@@ -106,12 +106,12 @@
                  </el-row>
                  </transition>
             
-                     <el-col :span = "24" style = "margin-top : 20px;">
+                     <el-col :span = "24" style = "margin-top : 40px;">
                                 <el-form-item label = "商品主图轮播图">
-                                        <el-col :span = "9" :offset = '1'>
+                                        <el-col :span = "9" :offset = '0'>
                                             <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;margin-left:122px; margin-top:-30px"></uploadComp>
                                         </el-col>
-                                        <el-col :span = "12" :offset = '2'>
+                                        <el-col :span = "12" :offset = '1'>
                                           商品主图：<br>图片尺寸等宽高，仅支持jpg格式的图片
                                         </el-col>
                                 </el-form-item>
@@ -175,7 +175,7 @@
                           <selectComp :options = "specOptions" @changeSelect = 'selectfunc' :index = "k" style="margin-left:65px"></selectComp>
                         
                           <el-row style = "margin-top:10px;">
-                          <el-tag
+                          <el-col :span = "20" :offset = "2"><el-tag
                             v-for="(tag,index) in shopData.tags[k]"
                               :key="index"
                               :closable = "true"
@@ -187,6 +187,7 @@
                             <el-button class="button-new-tag" size="small" @click = "addShopSpec(k)" style="margin-left:65px">
                               添加
                           </el-button>
+                          </el-col>
                           </el-row>
                       </el-col>
                  </el-row>

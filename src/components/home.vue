@@ -1,6 +1,6 @@
 <template>
     <el-row style = "margin-top : 10px;">
-      <el-col :span = "20" :offset = "2">
+      <el-col :span = "22" :offset = "1">
         <el-col :span = "5">
           
       <el-menu  style = "height:750px;width:100%;" router default-active="2"

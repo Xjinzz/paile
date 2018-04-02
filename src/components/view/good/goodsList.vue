@@ -136,7 +136,7 @@
           style = "z-index:11;border-radius:10px;position:fixed;top:0;left:0;background:#fff;top:5%;height:80%;overflow-y:scroll" 
           :span = "16" :offset="4">
              <el-col :span = "22" :offset="1">
-               <el-col style = "margin-top:20px;text-align:center;font-weight:800;font-size:1.5em;line-heihgt:3em;">
+               <el-col style = "margin-top:30px;text-align:center;font-weight:800;font-size:1.5em;line-heihgt:3em;">
                   {{powerData.name}}详细信息
               </el-col>
               <el-col style = "margin-top:20px;font-size:1.2em;line-height:1.8rem;">
@@ -220,11 +220,11 @@
                   <el-col style = "margin-top:20px;font-size:1.2em;line-height:1.8em;">图片预览</el-col>
                   <el-form label-width="200px">
                       <el-form-item v-if = "powerData.isgroup ==1" style = "margin-top:20px;line-height:100px;" label = "商品团购图:">
-                           <img :src="powerData.groupimg" alt="图片丢失了">
+                          <el-row> <img :src="powerData.groupimg" alt="图片丢失了"></el-row>
                       </el-form-item>
                       <el-form-item style = "margin-top:20px;" label = "商品主图、轮播图:">
-                          <img :src="powerData.cover_url" alt="图片丢失了">
-                           <img :src="item" alt="图片丢失了" v-for = "(item,i) in powerData.urlList" :key = "i">
+                            <img :src="powerData.cover_url" alt="图片丢失了">
+                           <el-col :span = "24"> <img :src="item" alt="图片丢失了" v-for = "(item,i) in powerData.urlList" :key = "i"></el-col>
                       </el-form-item>
 
                   </el-form>            
