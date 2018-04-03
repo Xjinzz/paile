@@ -4,7 +4,7 @@
         <el-col :span = "20" :offset = "2">
            <p>商品详情信息</p>
             <el-form :model = "shopData"  ref="ruleForm" :rules="rules"  label-width ="150px" status-icon inline>
-                <el-row>
+                <el-row style = "margin-top:30px">
                     <el-form-item label = "商品类型" prop = "shopType">
                         <el-select v-model="shopData.shopType">
                             <el-option v-for="item in options" :label = "item.label" :value = "item.value" :key = "item.value">
@@ -12,14 +12,14 @@
                         </el-select>
                     </el-form-item>
                 </el-row>
-                <el-row>
+                <el-row  style = "margin-top:30px">
                 <el-form-item label = "商品标题" prop = "name">
                     <el-input v-model = "shopData.name" placeholder = "请输入商品标题" >
                       <i slot = "suffix" class = "el-input__icon el-icon-goods "></i>
                     </el-input>
                 </el-form-item>
                 </el-row>
-                <el-row>
+                <el-row  style = "margin-top:30px">
                 <el-form-item label = "商品市场价格" prop = "price">
                     <el-input style="width:221px" v-model = "shopData.price" placeholder = "请输入商品价格">
                         <el-col slot="append">元</el-col>
@@ -56,7 +56,7 @@
                     </el-input>
                 </el-form-item> -->
                 <!-- </el-row> -->
-                <el-row>
+                <el-row  style = "margin-top:30px">
                 <el-form-item label = "商品描述" prop = "descr">
                      <el-input
                         style="width:221px"
@@ -69,7 +69,7 @@
                     
                 </el-form-item>
                  </el-row>
-                 <el-row>
+                 <el-row  style = "margin-top:30px">
                       <el-form-item label = "是否为团购商品：">
                             <el-radio-group v-model="shopData.isgroup">
                                   <el-radio-button border  :label = 1 >
@@ -83,7 +83,7 @@
                  </el-row>
                   <transition name="bounce">
                  <el-row v-if = "shopData.isgroup ==1">
-                      <el-row>
+                      <el-row  style = "margin-top:30px">
                         <el-form-item label = "团购价格" prop = "grpuPrice">
                             <el-input style="width:221px" v-model = "shopData.grpuPrice" placeholder = "请输入团购价格">
                                 <el-col slot="append">元</el-col>
@@ -91,11 +91,11 @@
                             </el-input>
                         </el-form-item>
                       </el-row>
-                      <el-row style = "margin-top:20px;">
+                      <el-row style = "margin-top:60px;">
                         <el-col :span = "24">
                                     <el-form-item label = "商品团购图" >
-                                        <el-col :span = "9" :offset = '0'>
-                                            <uploadComp @imgReady = "groupimgReady"  action = "http://www.paile.com"  style = "width:360px;height:90px;margin-left:122px; margin-top:-30px"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                        <el-col :span = 9 :offset = 0>
+                                            <uploadComp @imgReady = "groupimgReady"  action = "http://www.paile.com"  style = "width:360px;height:90px;margin-left:30px; margin-top:-30px"></uploadComp>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                                         </el-col>
                                         <el-col :span = "12" :offset = '1' style="margin-top:-20px">
                                             尺寸要求：<br/>宽：750px；高度在340-360px之间，<br/>图片支持：jpg格式  
@@ -105,11 +105,12 @@
                       </el-row>
                  </el-row>
                  </transition>
-            
-                     <el-col :span = "24" style = "margin-top : 40px;">
+            <el-row>
+                     <el-col :span = "24" style = "margin-top : 60px;">
                                 <el-form-item label = "商品主图轮播图">
                                         <el-col :span = "9" :offset = '0'>
-                                            <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;margin-left:122px; margin-top:-30px"></uploadComp>
+                                          <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;height:90px;margin-left:30px; margin-top:-30px"></uploadComp>  
+                                            <!-- <uploadComp @imgReady = "indexBannerimgReady" action = "http://www.paile.com"  style = "width:360px;margin-left:30px; margin-top:-30px"></uploadComp> -->
                                         </el-col>
                                         <el-col :span = "12" :offset = '1'>
                                           商品主图：<br>图片尺寸等宽高，仅支持jpg格式的图片
@@ -117,8 +118,9 @@
                                 </el-form-item>
                     </el-col> 
                
-          
-                    <el-col :span = "24" style = "margin-top : 20px;">
+            </el-row>
+            <el-row>
+                    <el-col :span = "24" style = "margin-top : 40px;">
                         <el-form-item label = "商品轮播图">
                              <el-col :span = "23" :offset = '1' style="margin-left:1px">
                                     <el-upload class="upload-demo" ref="uploadforbanner" action="https://jsonplaceholder.typicode.com/posts/" 
@@ -139,9 +141,9 @@
                             </el-col>
                          </el-form-item>
                     </el-col>
-             
-                    
-                    <el-col :span = "24" style = "margin-top : 20px;">
+            </el-row>
+                    <el-row>
+                    <el-col :span = "24" style = "margin-top : 40px;">
                         <el-form-item label = "商品详情图">
                              <el-col :span = "23" :offset = '1' style="margin-left:1px">
                                     <el-upload class="upload-demo" ref="uploadForshop" action="https://jsonplaceholder.typicode.com/posts/"
@@ -160,10 +162,10 @@
                             </el-col>
                          </el-form-item>    
                     </el-col>
-
-                    <hr/>
+                    </el-row>
+                    <el-col style = "border-top:1px solid #d2d2d2;margin-bottom:30px;"></el-col>
                       <el-row>
-                      <p style="margin-left:40px;margin-top:20px;">商品规格库存</p>
+                      <p style="margin-left:40px;margin-top:60px;">商品规格库存</p>
                       <el-col class = "top20" :span = "22" :offset="1">
                         <el-radio-group v-model="shopData.spennum" size = "mini" style="margin-left:65px">
                             <el-radio-button :label = "k" :key="k" v-for = "(i,k) in ['无','一种','两种','三种']">
@@ -171,10 +173,10 @@
                             </el-radio-button>
                       </el-radio-group>
                       </el-col>
-                      <el-col :span = "20" :offset="1" v-for = "(item,k) in shopData.spennum" :key = "item" style = "margin-top:10px">
+                      <el-col :span = "20" :offset="1" v-for = "(item,k) in shopData.spennum" :key = "item" style = "margin-top:20px">
                           <selectComp :options = "specOptions" @changeSelect = 'selectfunc' :index = "k" style="margin-left:65px"></selectComp>
                         
-                          <el-row style = "margin-top:10px;">
+                          <el-row style = "margin-top:30px;">
                           <el-col :span = "20" :offset = "2"><el-tag
                             v-for="(tag,index) in shopData.tags[k]"
                               :key="index"
@@ -184,7 +186,7 @@
                               :type="tag.type" style = "margin-left:5px;">
                               {{tag.name}}
                           </el-tag>
-                            <el-button class="button-new-tag" size="small" @click = "addShopSpec(k)" style="margin-left:65px">
+                            <el-button class="button-new-tag" size="small" @click = "addShopSpec(k)" style="margin-left:0px">
                               添加
                           </el-button>
                           </el-col>
@@ -208,26 +210,28 @@
                       </el-form-item>
                     </el-row>
                   </el-row> -->
-                  <el-row v-if = "shopData.isgroup" style = "margin-top:15px;">
+                  <el-row v-if = "shopData.isgroup" style = "margin-top:30px;">
                   
-                    <hr/>
-                    <el-form-item label = "团购人数" style="margin-top:15px">
+                    <el-col style = "border-top:1px solid #d2d2d2"></el-col>
+                    
+                    <el-form-item label = "团购人数" style="margin-top:30px">
                           <el-input v-model="shopData.groupUserCount" disabled></el-input>
                           <el-slider :min = '2' :max = '10' v-model="shopData.groupUserCount" 
-                          :format-tooltip="formatTooltip" style="margin-top:10px;margin-left:10px"></el-slider>
+                          :format-tooltip="formatTooltip" style="margin-top:30px;margin-left:10px"></el-slider>
                     </el-form-item>
                     <el-row>
-                    <el-form-item label = "单次限量" style="margin-top:-15px">
+                    <el-form-item label = "单次限量" style="margin-top:20px">
                         <el-input placeholder="请输入单次限量" v-model="shopData.singleCount"></el-input>
                     </el-form-item>
                     </el-row>
-                    <el-form-item label = "限购次数">
+                    <el-form-item label = "限购次数"  style="margin-top:20px">
                         <el-input placeholder="请输入限购次数" v-model="shopData.buyCount"></el-input>
                     </el-form-item>
                   </el-row>
-                    <el-col :span = "24" style = "margin-top:5px;text-align:center">
+                    <el-col :span = "24" style = "margin-top:30px;text-align:center">
                         <el-button type="danger" @click="submitUpload('ruleForm')" style="width:150px;margin-left:-200px">提交</el-button>
                     </el-col>
+                    <el-col style = "margin-top:50px"></el-col>
             </el-form>
         </el-col>
     </el-col>
@@ -250,7 +254,6 @@ export default {
         name: "",
         //商品市场价格
         price: "",
-
         //商品描述
         descr: "",
         //团购价格
@@ -390,7 +393,7 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入商品标题", trigger: "blur" },
-          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+          { min: 2, max: 100, message: "长度在 2 到 100 个字符", trigger: "blur" }
         ],
         price: [
           {
@@ -421,7 +424,7 @@ export default {
         ],
         descr: [
           { required: true, message: "请输入商品描述", trigger: "blur" },
-          { max: 30, message: "最多三十个字符", trigger: "blur" }
+          { max: 2000, message: "最多2000个字符", trigger: "blur" }
         ],
         shopType: [
           {
@@ -514,7 +517,11 @@ export default {
     //这里是测试的，如果将来有问题 在重新改，目前来看是没有问题的
     upanyload(fileList, index) {
       return new Promise((resolve, reject) => {
-
+        if(fileList.length == 0){
+          console.log(fileList.length)
+          this.imgGroupUrlTexT = "";
+          return resolve();
+        }
         ufload(fileList[Math.floor(index)])
           .then(data => {    
             console.log(1);  
@@ -559,8 +566,9 @@ export default {
     // 提交上传图片
     submitUpload(formName) {
       this.$refs[formName].validate(valid => {
+        // 通过验证
         if (valid) {
-          if (this.shopData) {
+          if (this.shopData.isgroup == '1') {
             //是团购商品时候怎么做
             if (typeof this.groupimgAttr == "object") {
               this.loadingText = "正在上传图片";
@@ -581,8 +589,7 @@ export default {
               });
           }
 
-          if ((typeof this.indexBannerimgAttr == "object" && this.changeImgList.length > 0 
-          && this.changeImgiList.length > 0)) {
+          if ((typeof this.indexBannerimgAttr == "object" && this.changeImgList.length > 0)) {
             this.loadingText = "正在上传图片";
             this.loading();
             ufload(this.indexBannerimgAttr).then((data)=>{

@@ -1,23 +1,23 @@
 <template>
-    <el-col :span = "24" :offset = "0" class = "info">
+    <el-col  :span = "24" :offset = "0" class = "info bower">
         <el-col :span = "22" :offset = "1" style = "margin-top:20px;">
-            <el-row style = "line-height:30px;">
+            <el-row style = "line-height:50px;">
                 <el-col :span = "4" class = "Text_title" style = "text-align:right">店铺名称 : </el-col>
                 <el-col :span = "16" :offset = "1">{{shopName}}</el-col>
             </el-row>
-            <el-row style = "line-height:30px;">
+            <el-row style = "line-height:50px;">
                 <el-col :span = "4" class = "Text_title"  style = "text-align:right">店铺认证 : </el-col>
                 <el-col :span = "16" :offset = "1">{{shopAuth}}</el-col>
             </el-row>  
-            <el-row style = "line-height:30px;">
+            <el-row style = "line-height:50px;">
                 <el-col :span = "4" class = "Text_title"  style = "text-align:right">店铺保证金 : </el-col>
                 <el-col :span = "16" :offset = "1">{{shopBond}}元</el-col>
             </el-row>  
-            <el-row style = "line-height:30px;">
+            <el-row style = "line-height:50px;">
                 <el-col :span = "4" class = "Text_title"  style = "text-align:right">主营类目 : </el-col>
                 <el-col :span = "16" :offset = "1">{{MainCategory}}</el-col>
             </el-row>
-            <el-row style = "">
+            <el-row style = "line-height:50px;">
                 <el-col  :span = "4" class = "Text_title"  style = "text-align:right;line-height:100px">店铺头像 : </el-col>
                 <el-upload
                     class="upload-demo"
@@ -35,44 +35,44 @@
                 </el-upload>
       
             </el-row>
-            <el-row>
+            <el-row style = "margin-top:20px">
                 <el-col class = "Text_title"  :span = "4"  style = "text-align:right;line-height:60px">*店铺地址:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.addres"></el-input>    
+                    <el-input clearable v-model.lazy="shop.addres" style = "margin-top:10px;"></el-input>    
                 </el-col>    
             </el-row>    
-             <el-row>
+             <el-row style = "margin-top:20px">
                 <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">*管理员姓名:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.name"></el-input>    
+                    <el-input clearable v-model.lazy="shop.name" style = "margin-top:10px;"></el-input>    
                 </el-col>    
             </el-row>   
-                <el-row>
+                <el-row style = "margin-top:20px">
                     <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">*管理员邮箱:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.email"></el-input>    
+                    <el-input clearable v-model.lazy="shop.email" style = "margin-top:10px;"></el-input>    
                 </el-col>    
             </el-row>  
-              <el-row>
+              <el-row style = "margin-top:20px">
                 <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">管理员手机号:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.phone" disabled></el-input>    
+                    <el-input clearable v-model.lazy="shop.phone" disabled style = "margin-top:10px;"></el-input>    
                 </el-col>    
             </el-row>  
-             <el-row>
+             <el-row style = "margin-top:20px">
                 <el-col :span = "4" class = "Text_title"   style = "text-align:right;line-height:50px">备用联系人姓名:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.spareName" disabled></el-input>    
+                    <el-input clearable v-model.lazy="shop.spareName" disabled style = "margin-top:10px;"></el-input>    
                 </el-col>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             </el-row>  
-             <el-row>
+             <el-row style = "margin-top:20px">
                 <el-col :span = "4"  class = "Text_title"  style = "text-align:right;line-height:50px">备用联系人手机:</el-col>
                 <el-col :span = "16" :offset = "1">
-                    <el-input clearable v-model.lazy="shop.sparePhone" disabled></el-input>    
+                    <el-input clearable v-model.lazy="shop.sparePhone" disabled style = "margin-top:10px;"></el-input>    
                 </el-col>    
             </el-row> 
-            <el-row style = "margin-top:20px;">
-                  <el-button style=" width:150px;margin-left:40px" type="danger" @click = "save">保存</el-button>    
+            <el-row style = "margin-top:30px;margin-bottom:50px;text-align:center">
+                  <el-button style=" width:150px;margin-left:40px;margin-top:10px;" type="danger" @click = "save" >保存</el-button>    
             </el-row> 
         </el-col>
     </el-col>
@@ -162,7 +162,7 @@ export default {
 
 <style lang = "scss"  scoped>
     .info {
-        height:630px;
+        height:610px;
         background:#ecf1f5;
     }
      .Text_title{
@@ -172,4 +172,26 @@ export default {
         /* text-shadow:1px 1px 3px #999; */
         
     }
+        
+.bower {
+  height: 610px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 8px; /*滚动条宽度*/
+  }
+
+  /*定义滚动条轨道 内阴影+圆角*/
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px; /*滚动条的背景区域的圆角*/
+    background-color: rgba(255, 255, 255, 0); /*滚动条的背景颜色*/
+  }
+
+  /*定义滑块 内阴影+圆角*/
+  &::-webkit-scrollbar-thumb {
+    border-radius: 15px; /*滚动条的圆角*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0); /*滚动条的背景颜色*/
+  }
+}
 </style>

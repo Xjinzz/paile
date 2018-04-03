@@ -35,10 +35,18 @@ const login = () =>
  * */ 
 const orderSearch = () =>import ('@/components/view/DeliverAdmin/orderSearch')
 const groupGoodList = () => import('@/components/view/DeliverAdmin/groupGoodList')
+
+
+/**
+ * 拍乐网用户协议
+ * */ 
+const Agreement = () =>import('@/components/view/Agreement')
+
+
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [{
       path: '/',
       name: "拍乐网",
@@ -241,9 +249,17 @@ const router = new Router({
           },
 
         },
+
+        {
+          path:"/Agreement",
+          component:Agreement,
+          meta: {
+            title: "拍乐网用户协议"
+          },
+
+        },
         {
           path: "/registration3",
-
           component: registration3,
           beforeEnter: (to, from, next) => {
             //在更新完成后获取token中的code  然后替换  需要传入一个新的字符串，进行判断

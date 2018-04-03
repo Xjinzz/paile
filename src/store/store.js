@@ -217,12 +217,16 @@ const publicFunc = {
     }
 }
 
-
+const login = {
+    state :{
+        isLogin:localStorage.getItem('pailewang_token')
+    }
+}
 
 const store =  new vuex.Store({
 
     modules:{
-        goodsMd,publicFunc
+        goodsMd,publicFunc,login
     }
 })
 export default store;

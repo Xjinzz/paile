@@ -1,51 +1,61 @@
 <template>
-  <el-row style = "margin-top:20px;">
-      <el-col :span = "16" :offset = "4">
-        <el-steps :active="active" finish-status="success" process-status = "finish" space = "40%" align-center>
+  <el-row style = "width:100%;">
+      <el-row style = "display:block;width:1200px;margin:20px auto;padding-top:30px;background:#fff;">
+
+        <el-steps :active="active" finish-status="success" process-status = "finish" space = "40%" style = "width:1000px;margin:0 auto;" align-center>
             <el-step title="个人信息"  icon = "el-icon-time"></el-step>
             <el-step title="店铺信息" icon = "el-icon-time"></el-step>
             <el-step title="注册成功" icon = "el-icon-time"></el-step>
         </el-steps>
 
-<el-col :span = "12" :offset = "6">
+
+<el-col :span = "12" :offset = "7" style = "margin-top:30px;">
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" status-icon class="demo-ruleForm">
   <el-form-item label="注册人姓名" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+    <el-input v-model="ruleForm.name" style = "width:220px;"></el-input>
   </el-form-item>
-  <el-form-item label="注册人邮箱" prop="mail">
-    <el-input v-model="ruleForm.mail"></el-input>
+  <el-form-item label="注册人邮箱" prop="mail" style = "margin-top:30px;">
+    <el-input v-model="ruleForm.mail" style = "width:220px;"></el-input>
   </el-form-item>
-  <el-form-item label="手机号" prop="phone">
-    <el-input v-model="ruleForm.phone"  :disabled="true"></el-input>
+  <el-form-item label="手机号" prop="phone" style = "margin-top:30px;">
+    <el-input v-model="ruleForm.phone"   style = "width:220px;" :disabled="true"></el-input>
   </el-form-item>
-   <el-form-item label="身份证号" prop="idcard">
-    <el-input v-model="ruleForm.idcard"></el-input>
+   <el-form-item label="身份证号" prop="idcard"  style = "margin-top:30px;">
+    <el-input v-model="ruleForm.idcard" style = "width:220px;"></el-input>
   </el-form-item>
 
-  <el-form-item label="身份证有效期" required>
+  <el-form-item label="身份证有效期" required  style = "margin-top:30px;">
     <el-col :span="16">
-      <el-form-item prop="idcard_validate">
-        <el-date-picker @change="changeTime" type="date" placeholder="选择日期" v-model="ruleForm.idcard_validate" style="width: 100%;"></el-date-picker>
+      <el-form-item prop="idcard_validate" >
+        <el-date-picker @change="changeTime" type="date" placeholder="选择日期" v-model="ruleForm.idcard_validate" style="width: 220px;"></el-date-picker>
       </el-form-item>
     </el-col>
   </el-form-item>
-     <el-form-item label="身份证头像面" required>
+     <div style = "margin-bottom:20px;margin-top:30px">
+    <p class = "imgLabel">身份证头像面</p>
      <uploadComp  @imgReady = "img1Ready" :actionUrl = "actionUrl"/>
-   </el-form-item>
-    <el-form-item label="身份证国徽面" required>
+</div>
+     <div  style = "margin-bottom:20px;margin-top:30px">
+    <p  class = "imgLabel">身份证国徽面</p>
       <uploadComp  @imgReady = "img2Ready" :actionUrl = "actionUrl"/>
-    </el-form-item>
-   <el-form-item label="手持身份证半身照" required>
+</div>
+     <div style = "margin-bottom:20px;margin-top:30px">
+    <p class = "imgLabel">手持身份证半身照</p>
+
      <uploadComp  @imgReady = "img3Ready" :actionUrl = "actionUrl"/>
-   </el-form-item>
-   <el-row  style = "text-align:center">
-    <el-button type="primary" @click="goprev()" >上一步</el-button>
-    <el-button type="primary" @click="gonext('ruleForm')">下一步</el-button>
+</div>
+<el-col style = "width:350px;margin:0 auto;padding-bottom:50px;">
+                               <div class = "go-btn"  style = "margin-left:100px;" @click="goprev()">上一步</div> 
+                               <div class = "go-btn" style = "margin-left:50px;"  @click="gonext('ruleForm')">下一步</div>                                
+
     
-   </el-row>
+</el-col>
+
 </el-form>
 </el-col>    
-    </el-col>
+</el-row>
+
+    <el-row style="height:50px;"></el-row>
   </el-row>
 </template>
 
@@ -283,6 +293,45 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.imgLabel{
+      text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width:150px;
+    line-height: 110px;
+}
+.go-btn{
+  width:100px;;
+  float: left;
+  margin-left:50px;
+      display:block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    -webkit-transition: .1s;
+    transition: .1s;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    background:#d43636;
+    color:#fff;
+}
+.go-btn:hover{
+  background:#f78989
+}
 </style>

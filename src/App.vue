@@ -1,6 +1,6 @@
 <template>
-  <el-row style = "margin-top:20px;">
-    <router-view></router-view>
+  <el-row style = "font-family:'Microsoft YaHei'">
+    <router-view ></router-view>
   </el-row>
 </template>
 
@@ -9,5 +9,8 @@
 </script>
 
 <style>
-
+*{
+  margin:0;
+  padding:0;
+}
 </style>

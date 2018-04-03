@@ -4,16 +4,16 @@
         <el-row style="font-weight: normal;">
             <!-- <el-form label-width="120px" :inline="true"  :rules="rules"  v-model="ruleForm" ref = "ruleForm" status-icon class="demo-ruleForm"> -->
                 <el-form :model="ruleForm" :inline= true :rules="rules" ref="ruleForm" label-width="120px" status-icon class="demo-ruleForm">
-                <el-form-item label = "订单编号">
-                    <el-input :rows="1" v-model="ruleForm.orderNo"></el-input>
+                <el-form-item label = "订单编号" >
+                    <el-input :rows="1" style = "margin-top:5px;;" v-model="ruleForm.orderNo"></el-input>
                 </el-form-item>
                 <el-form-item label = "收货手机号">
-                    <el-input :rows="1" v-model="ruleForm.customerPhone"></el-input>
+                    <el-input :rows="1" style = "margin-top:5px;;"  v-model="ruleForm.customerPhone"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item label = "订单状态">
-                    <el-select style="width:206px;" v-model = "ruleForm.status" placeholder="请选择订单状态">
-                        <el-option :label = "option.label" :value = "option.value" v-for = "(option,index) in static_option" :key = "index"></el-option>
+                    <el-select style="width:206px;margin-top:5px" v-model = "ruleForm.status" placeholder="请选择订单状态">
+                        <el-option  :label = "option.label" :value = "option.value" v-for = "(option,index) in static_option" :key = "index"></el-option>
                     </el-select>
                 </el-form-item>
                 <br>
@@ -25,7 +25,7 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         format="yyyy 年 MM 月 dd 日"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd"   style = "margin-top:5px;;" >
                         </el-date-picker>
 
 
@@ -36,7 +36,8 @@
             </el-form>
         </el-row>
         <el-row style = "margin-top:20px;" v-if = "searched">
-            <el-row style="">查询结果</el-row>
+            <el-row >查询结果</el-row>
+            <el-row style = "width:80%; border-bottom:1px dotted #d2d2d2;"></el-row>
             <!-- <el-row style="color:#606266;margin-left:36px;font-weight:normal">
                 共查到<b style="color:red"> {{reqNumber}} </b>条数据
             </el-row> -->
@@ -291,6 +292,7 @@ export default {
   height: 730px;
  
   }
+
   .scrollbal{
        overflow-y: scroll;
   position: relative;
@@ -312,4 +314,5 @@ export default {
     background-color: rgba(255, 255, 255, 0); /*滚动条的背景颜色*/
   }
 }
+
 </style>

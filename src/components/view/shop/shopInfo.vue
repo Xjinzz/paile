@@ -1,15 +1,15 @@
 <template>
-  <el-row>
-      <el-col :span = "22" :offset = "1">
+  <el-row style = "height:750px;">
+      <el-col :span = "22" :offset = "1" style = "margin-top:20px;margin-left:20px;">
           <el-row class = "pageTitle">{{pageTitle}}</el-row>
           <el-row>
-            <ul class = "shopHeaderBtn" style = "margin-top:10px;">
+            <ul class = "shopHeaderBtn" style = "margin-top:20px;">
                     <li v-for = "(msg,i) in btnMsg" :key = "msg"   class = "fl btnhover normalBorder btnPadding center" 
                     :class = "i>0?'btnLeft':''"  @click = "headerBtnClick(i)">{{msg}}</li>
                 
             </ul>
           </el-row>
-          <el-row style = "margin-top:10px;">
+          <el-row style = "margin-top:20px;">
             <basicInfo v-show="!switchBtn"/>
             <paperInfo v-show = "switchBtn"/>
           </el-row>
@@ -51,9 +51,10 @@ export default {
 }
 </script>
 
-<style lang = "scss" type = "text/css">
+<style lang = "scss" type = "text/css" scoped>
     @import "../../publicStyle/public";
     .active {
         border:2px solid #f00;
     }
+
 </style>

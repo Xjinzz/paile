@@ -1,9 +1,15 @@
 <template>
     <el-row class = "bgGray">
-        <el-col :span = "12" :offset = "6"  style = "margin-top:10px">
-              <el-row style = "margin-top:30px;padding-top:30px;background:#fff">
-                  <el-col>
-                      <h3 class = "c">账号注册</h3>
+      <div class = "background">
+        <div style = "width:1200px;margin:0 auto;height:600px;">
+          <div style = "width:425px;margin-top:140px;float:left;">
+              <img src="../../../assets/index.png" width = "425px" alt="test">
+          </div>
+       <div style= "width:520px;margin-right:50px;float:right">
+         <div style = "height:100px;"></div>
+              <el-row style = "border-radius:2%;background:#fff">
+                  <div style = "height:20px;"></div>
+                      <h3 class = "c" style = "font-size:25px;">账号注册</h3>
                       <el-col :span = "14" :offset = "5">
                           <el-form 
                            style = "padding-top:10px;"
@@ -12,37 +18,80 @@
                       label-position="left" 
                       label-width="80px" 
                       class="demo-ruleForm">
-                        <el-form-item label="手机号">
-                            <el-input type="text" v-model="infoFrom.phone" auto-complete="off" id = "phone"></el-input>
-                        </el-form-item>
+                     <el-row style = "margin-bottom:20px;">
+                            <el-input type="text" v-model="infoFrom.phone" auto-complete="off" id = "phone" placeholder="请输入手机号"></el-input>
+                    </el-row>
                         <el-row>
                             <el-col :span = "12">
                                 <el-input v-model = "checkImgCode" id="code_input" placeholder="右侧验证码" @focus="Focuscode" type="text" auto-complete="off"></el-input>       
                             </el-col>
                             <el-col :span = "11" :offset = "1">
-                                <div id="v_container" style="width: 100%;height: 50px;"></div>
+                                <div id="v_container" style="width: 100%;height: 40px;"></div>
                             </el-col>
-                            <el-col v-html="checkT" :class="ifcheck?'txt_success':'txt_err'" :span = "24"></el-col>
+                                     <el-col v-html="checkT" style = "margin-top:10px;" :class="ifcheck?'txt_success':'txt_err'" :span = "24"></el-col>
+                       
 
                         </el-row>
-                        <el-row>
+                        <el-row style = "margin-top:10px;">
                           <el-col :span = "12"><el-input id = "MsgCode" v-model="infoFrom.code" placeholder="短信验证码"></el-input>
                             </el-col>
                             <el-col :span = "11" :offset="1">
-                                 <el-button type="danger" style = "width:100%" @click = "sengMsgCode" v-show="getMsgBtnShow">获取短信验证码</el-button>
+                               <div class = "login-btn"  @click = "sengMsgCode" v-show="getMsgBtnShow">获取短信验证码</div> 
                                   <el-button type="info" :loading="true"  style = "width:100%" v-show="!getMsgBtnShow">({{getMsgSurplusSec}}) 秒后重新获取</el-button>
                             </el-col>
                             
                         </el-row>
-                        <el-row style = "margin-top :10px;">
-                          <el-button type="danger" @click = "submit">下一步</el-button>
+                        <el-row style = "margin-top :20px;">
+                          <div class = "login-btn" @click = "submit">注册</div> 
+                          <el-col style = "text-align:right;font-size:12px;">
+                            已有账号？
+                            <el-button type = "text" @click = "goRegistration" style  = "color:#9a0000 ;font-size:12px;text-decoration:underline">点击登陆</el-button>
+                          </el-col>
                         </el-row>
                         <el-row style = "margin-top:20px;"></el-row>
                       </el-form>
                       </el-col>
                   </el-col>
               </el-row>  
-        </el-col>
+        </div>          </div>
+                  <div style ="margin-top : 40px;">
+            <ul class = "footerMenu" style = "background:#fff;">
+              <li>联系我们</li>
+              <li>关于我们</li>
+              <li>人才招聘</li>
+              <li>商家入驻 </li>
+              <li>广告服务</li>
+              <li>代理加盟</li>
+              <li>举报中心</li>
+            </ul>
+
+
+        </div>
+        <div style = "background:#fff;height:50px;clear:both;"></div>
+
+        </div>
+        <div style = "font-size:16px;line-height:40px;background:#fff;text-align:center;clear:both;">
+           <div style = "background:#fff;height:50px;clear:both;"></div>
+客服电话：400-826-1533
+        </div>
+
+ <div style = "font-size:14px;line-height:40px;background:#fff;text-align:center;clear:both;">
+© CopyRight 2017 拍乐网 浙ICP备17033779号
+        </div>
+
+  <div style = "background:#fff;height:80px;clear:both;"></div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
     </el-row>
 </template>
 <script>
@@ -73,6 +122,10 @@ export default {
     }
   },
   methods: {
+    //切换登陆
+    goRegistration(){
+      this.$router.push('/login');
+    },
     Focuscode() {
       this.checkImgCode = document.getElementById("code_input").value;
     },
@@ -99,6 +152,7 @@ export default {
         }
       }
     },
+
     initCheck() {
       //    生成验证码并且绑定到vue
       var verifyCode = new GVerify({
@@ -110,7 +164,7 @@ export default {
     },
     checkPhone() {},
     alert(data,config){
-      console.log(config)
+
       this.$alert(data,'拍乐网提示您',config);
     },
     sengMsgCode() {
@@ -232,14 +286,68 @@ export default {
 
 <style lang="scss" scoped>
 @import url("../../publicStyle/public.scss");
+.background{
+width:100%; 
+height:600px; 
+
+    background: -moz-linear-gradient(top, #bb0707 0%, #620202 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #bb0707), color-stop(100%,#620202));
+    background: -webkit-linear-gradient(top,  #bb0707 0%,#620202 100%);
+    background: -o-linear-gradient(top,  #bb0707 0%,#620202 100%);
+    background: -ms-linear-gradient(top,  #bb0707 0%,#620202 100%);
+    background: linear-gradient(to bottom,  #bb0707 0%,#620202 100%);
+}
 .bgGray {
-  background: #ebecef;
-  height: 700px;
+  background: #fff;
+  
+  
 }
 .txt_success {
   color: #2fd508;
 }
 .txt_err {
   color: #f00;
+}
+.login-btn{
+  width:100%;
+      display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    // color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    -webkit-transition: .1s;
+    transition: .1s;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    background:#d43636;
+    color:#fff;
+
+}
+.login-btn:hover{
+  background:#f78989
+}
+
+.footerMenu{
+  width:722px;
+  margin:0 auto;
+}
+.footerMenu li {
+   width:100px;
+   text-align:center;
+   font-size:16px;
+   border-right: 1px solid #333;
+   float: left;;
+   line-height: 10px;
+   list-style : none;
+
 }
 </style>

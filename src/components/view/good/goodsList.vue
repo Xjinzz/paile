@@ -44,10 +44,10 @@
                
             </el-col>
             </el-row>
-                <el-row>
+                <el-row >
                 <h3>查询结果</h3>
                 <el-col :span = "22" :offset="1">
-                <el-row style = "margin-top : 10px;">
+                <el-row style = "margin-top : 0px;">
                     
                     <el-table
                         :data="tableData"
@@ -118,7 +118,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <el-col style = "text-align:center" class = "top20">
+                    <el-col style = "text-align:center;margin-bottom:20px;" class = "top20" >
                     <el-pagination
                         style="margin-right:20px"
                         background
@@ -220,11 +220,11 @@
                   <el-col style = "margin-top:20px;font-size:1.2em;line-height:1.8em;">图片预览</el-col>
                   <el-form label-width="200px">
                       <el-form-item v-if = "powerData.isgroup ==1" style = "margin-top:20px;line-height:100px;" label = "商品团购图:">
-                          <el-row> <img :src="powerData.groupimg" alt="图片丢失了"></el-row>
+                          <el-row> <img :src="powerData.groupimg" alt="图片丢失了" height="180px" width="380px"></el-row>
                       </el-form-item>
                       <el-form-item style = "margin-top:20px;" label = "商品主图、轮播图:">
-                            <img :src="powerData.cover_url" alt="图片丢失了">
-                           <el-col :span = "24"> <img :src="item" alt="图片丢失了" v-for = "(item,i) in powerData.urlList" :key = "i"></el-col>
+                            <img :src="powerData.cover_url" alt="图片丢失了" width = "140px" height= "140px;">
+                           <el-col :span = "24"> <img :src="item" alt="图片丢失了" v-for = "(item,i) in powerData.urlList" :key = "i" width = "140px" height="140px"></el-col>
                       </el-form-item>
 
                   </el-form>            

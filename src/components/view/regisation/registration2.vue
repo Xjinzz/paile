@@ -1,24 +1,32 @@
 <template>
-  <el-row style = "margin-top:20px;">
-      <el-col :span = "16" :offset = "4">
-        <el-steps :active="active" finish-status="success" process-status = "finish" space = "40%" align-center>
-            <el-step title="个人信息"  icon = "el-icon-time"></el-step>
+  <el-row style = "width:100%">
+      <el-row style = "display:block;width:1200px;margin:20px auto;padding-top:30px;background:#fff;">
+        <el-steps :active="active" finish-status="success" process-status = "finish" space = "40%" style = "width:1000px;color:#f00;margin:0 auto;" align-center>
+            <el-step title="个人信息" style = "color:#f00" icon = "el-icon-time"></el-step>
             <el-step title="店铺信息" icon = "el-icon-time"></el-step>
             <el-step title="注册成功" icon = "el-icon-time"></el-step>
         </el-steps>
 
-<el-col :span = "12" :offset = "5" style = "margin-top :20px">
-<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" status-icon class="demo-ruleForm">
-  <el-form-item label="主营类目" prop="businessDesc">
-    <el-input v-model="ruleForm.businessDesc" v-on:blur = "categroyOut" ref = "businessDesc" clearable></el-input>
-        <el-col class = "inputTip" v-if = "tip.businessDesc">* 请认真填写经营类目，信息不实会导致审核结果</el-col>
+<el-col :span = "12" :offset = "7" style = "margin-top :30px">
+<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" status-icon class="demo-ruleForm">
+  <el-form-item label="主营类目" prop="businessDesc2">
+    <!-- <el-input v-model="ruleForm.businessDesc" v-on:blur = "categroyOut"  style = "width:220px;" ref = "businessDesc" clearable></el-input> -->
+   <el-select v-model="ruleForm.businessDesc2" multiple placeholder="请选择主营类目">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+  </el-select>
+        <el-col class = "inputTip" v-if = "tip.businessDesc" style = "margin-top:5px;">* 请认真填写经营类目，信息不实会导致审核结果</el-col>
   </el-form-item>
-    <el-form-item label="店铺名称" prop="name">
-    <el-input v-model="ruleForm.name" v-on:blur = "shopNameOut" ref = "name" clearable></el-input>
-        <el-col class = "inputTip" v-if = "tip.name">* 店铺名称不可修改，请谨慎填写</el-col>
+    <el-form-item label="店铺名称" prop="name" style = "margin-top:30px;">
+    <el-input v-model="ruleForm.name" v-on:blur = "shopNameOut"  style = "width:220px;" ref = "name" clearable></el-input>
+        <el-col class = "inputTip" v-if = "tip.name" style = "margin-top:5px;">* 店铺名称不可修改，请谨慎填写</el-col>
   </el-form-item>
-  <el-form-item label = "登陆账号" required>
-      <el-input v-model="ruleForm.phone"  ref = "phone" :disabled="true" ></el-input>
+  <el-form-item label = "登陆账号" required style = "margin-top:30px;">
+      <el-input v-model="ruleForm.phone"  ref = "phone"  style = "width:220px;"  :disabled="true" ></el-input>
   </el-form-item>
   <!-- <el-form-item label = "登陆密码" prop = "password" required  ref = "password" clearable>
       <el-input placeholder="请输入密码" type = "password" v-model="ruleForm.password" @blur = "passwordOut"/>
@@ -28,9 +36,13 @@
       <el-input placeholder="请再次输入密码" @blur = "checkpassfunc" type = "password" v-model="ruleForm.checkpassword"/>
        <el-col class = "inputTip" v-html="checkText"></el-col>
   </el-form-item> -->
- <el-form-item label="店铺头像" required>
+
+
+        <div style = "margin-bottom:20px;margin-top:30px;">
+    <p class = "imgLabel">店铺头像</p>
      <uploadComp @imgReady = "imgicoReady" :actionUrl = "actionUrl"/>
-   </el-form-item>
+   
+</div>
   <!-- 是否有实体店按钮 暂时去掉 -->
       <!-- <el-form-item label="是否有实体店" required prop = "isreal" >
     <el-radio-group v-model="ruleForm.isreal" size="medium" >
@@ -45,37 +57,52 @@
  <el-form-item label="营业执照" required v-if = "entity==1">
      <uploadComp @imgReady = "imgReady" :actionUrl = "actionUrl"/>
    </el-form-item> -->
-<el-form-item label = "城市" required>
-        <el-input v-model="ruleForm.city" disabled/>
+<el-form-item label = "城市" required style = "margin-top:30px;">
+        <el-input v-model="ruleForm.city" style = "width:220px" disabled/>
     </el-form-item>
-   <el-form-item label = "店铺地址" required prop = "address">
-        <el-input  v-on:blur = "addresDesc" v-model="ruleForm.address" placeholder="请输入店铺地址"/>
-          <el-col class = "inputTip" v-if = "tip.addresDesc">* 请认真此项否则可能导致注册失败，示例:铜山区金山桥经济开发区杨山路21-6号</el-col>
+   <el-form-item label = "店铺地址" required prop = "address" style = "margin-top:30px;">
+        <el-input  v-on:blur = "addresDesc"  style = "width:220px"  v-model="ruleForm.address" placeholder="请输入店铺地址"/>
+          <el-col class = "inputTip" v-if = "tip.addresDesc" style = "margin-top:5px;">* 请认真此项否则可能导致注册失败，<br/>示例:铜山区金山桥经济开发区杨山路21-6号</el-col>
     </el-form-item>
 
- <el-form-item label="营业执照" required>
+
+
+
+  <div style = "margin-bottom:20px;margin-top:30px;">
+    <p class = "imgLabel">营业执照</p>
      <uploadComp @imgReady = "imgReady" :actionUrl = "actionUrl"/>
-   </el-form-item>
+   
+</div>
     <!-- <el-form-item label = "联系地址" props = "address" required v-if = "entity==2">
         <el-input v-model="ruleForm.address" placeholder="请输入联系地址"/>
     </el-form-item> -->
 
-    <el-row style = "margin-top:25px;text-align:center;">
-             <el-button type ="danger" @click = "registration2Golast">
+    <el-row style = "margin-top:30px;text-align:center;">
+             <!-- <el-button type ="danger" @click = "registration2Golast">
             上一步
         </el-button>
         <el-button type ="danger" @click = "registration2Click('ruleForm')">
             下一步
-        </el-button>
-   
-        <el-col class = "inputTip" style = " margin-top:20px;text-align:center">
-            * 注册店铺代表我已经同意<router-link to = "/xieyi" style = "color:blue">《拍乐网协议》</router-link>
+        </el-button> -->
+
+
+
+        <el-col style = "width:350px;margin:0 auto;padding-bottom:50px;">
+                               <div class = "go-btn"  style = "margin-left:100px;" @click = "registration2Golast">上一步</div> 
+                               <div class = "go-btn" style = "margin-left:50px;"  @click = "registration2Click('ruleForm')">下一步</div>                                
+
+       <el-col class = "inputTip" style = " margin-top:20px;text-align:right;">
+            * 注册店铺代表我已经同意<a href = "/Agreement" target="_blank" style = "color:blue">《拍乐网协议》</a>&nbsp;
         </el-col>
+</el-col>
+   
+     
     </el-row>
  
 </el-form>
 </el-col>    
-    </el-col>
+</el-row>
+  
   </el-row>
 </template>
 
@@ -91,6 +118,60 @@ export default {
   },
   data() {
     return {
+
+
+ options: [{
+          value: '水果生鲜',
+          label: '水果生鲜'
+        }, {
+          value: '家居日用',
+          label: '家居日用'
+        }, {
+          value: '美妆个护',
+          label: '美妆个护'
+        }, {
+          value: '服饰内衣',
+          label: '服饰内衣'
+        }, {
+          value: '母婴',
+          label: '母婴'
+        }, {
+          value: '数码电器',
+          label: '数码电器'
+        }, {
+          value: '家纺家具',
+          label: '家纺家具'
+        }, {
+          value: '运动户外',
+          label: '运动户外'
+        }, {
+          value: '礼品箱包',
+          label: '礼品箱包'
+        }, {
+          value: '食品饮料',
+          label: '食品饮料'
+        }, {
+          value: '收拾配件',
+          label: '收拾配件'
+        }, {
+          value: '百货超市',
+          label: '百货超市'
+        }, {
+          value: '办公学习',
+          label: '办公学习'
+        }, {
+          value: '生活服务',
+          label: '生活服务'
+        }, {
+          value: '医药保健',
+          label: '医药保健'
+        }, {
+          value: '其他',
+          label: '其他'
+        }],
+
+
+
       uploading: "",
       loadingText: "",
       color: "#f00",
@@ -106,6 +187,7 @@ export default {
       active: 1,
       //表格里面的数据
       ruleForm: {
+        businessDesc2:[],
         // 主营描述
         businessDesc: "",
         //店铺名称
@@ -124,12 +206,13 @@ export default {
         latitude: "0",
         longitude: "0"
       },
+      businessDesc:"",
       // 密码提示文字
       checkText: "",
       // 校验规则
       rules: {
-        businessDesc: [
-          { required: true, message: "请输入姓名", trigger: "blur" }
+        businessDesc2: [
+          { required: true, message: "请输入主营类目", trigger: "blur" }
         ],
         name: [{ required: true, message: "请输入店名", trigger: "blur" }],
         //  password:[
@@ -247,11 +330,19 @@ export default {
                             this.ruleForm.icon = `${base_uploadUrl}${
                               JSON.parse(data).url
                             }`;
+                            console.log(this.ruleForm.address)
                             searchByStationName(this.ruleForm.address)
                               .then(data => {
                                 this.ruleForm.longitude = data.point.lng;
                                 this.ruleForm.latitude = data.point.lat;
-
+                                 for(let i = 0 ;i<this.ruleForm.businessDesc2.length;i++){
+                                   if(i == 0){
+                                      this.ruleForm.businessDesc = this.ruleForm.businessDesc2[i];
+                                      continue;
+                                   }
+                                   this.ruleForm.businessDesc = this.ruleForm.businessDesc+','+ this.ruleForm.businessDesc2[i]
+                                 }
+                                
                                 promiseAjax(
                                   `http://${base_IP}:${base_port}/paile-service/api/shopsHandler/createShop`,
                                   this.ruleForm
@@ -286,6 +377,7 @@ export default {
                                   });
                               })
                               .catch(err => {
+                                console.log(err);
                                 this.uploading.close();
                                 this.$message({
                                   type: "error",
@@ -384,12 +476,58 @@ export default {
 </script>
 
 <style <style lang="scss" scoped>
-$tipcolor: #999;
 
+$tipcolor: #999;
+.imgLabel{
+      text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width:150px;
+    line-height: 110px;
+}
+.go-btn{
+  width:100px;;
+  float: left;
+  margin-left:50px;
+      display:block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    -webkit-transition: .1s;
+    transition: .1s;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    background:#d43636;
+    color:#fff;
+}
+.go-btn:hover{
+  background:#f78989
+}
 .inputTip {
   color: $tipcolor;
   font-size: 12px;
   text-align: left;
   line-height: 15px;
+}
+
+
+.el-step__head.is-success {
+    color: #333;
+    border-color: #67c23a;
 }
 </style>

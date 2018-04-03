@@ -1,5 +1,5 @@
 <template>
-  <el-col :span = "22" :offset="1" style = "text-align:center;">
+  <el-col :span = "22" :offset="1" style = "text-align:center;margin-top:20px;">
       <el-col style = "text-align:left;line-height:40px;font-weight:800;">团购列表查看</el-col>
       <el-table stripe border empty-text = "团购列表为空"  :data = "groupGoodList"  style="width: 100%" :header-cell-style = "headerStyle">
           <el-table-column prop = "id" align = "center" header-align = "center" label = "商品id">
@@ -38,7 +38,7 @@
         
       </el-table>
         <el-pagination
-                        style="margin-right:20px"
+                        style="margin-right:20px;margin-top:20px;"
                         background
                         :page-size="showListNum"
                         :current-page = "currentPage"

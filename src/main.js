@@ -18,10 +18,17 @@ Vue.use(ElementUI);
 
 
 
-new Vue({
+let vm = new Vue({
   el: '#app',
   router,
   store,
   components: { App },
   template: '<App/>'
 })
+window.onbeforeunload = function(){
+  if(event.clientX<=0 && event.clientY<=0) { 
+    localStorage.removeItem('isRefer')
+  } else  { 
+      
+  } 
+};
